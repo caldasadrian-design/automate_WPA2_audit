@@ -1,0 +1,4 @@
+graph TD
+A["read_packets(const std::string& filename)"] -->|"llama a"| B["libpcap"]
+C["check_for_cloaking(const Packet& packet, const std::string& target_ip)"] -->|"llama a"| B["libpcap"]
+D["write_packets(const std::vector<Packet>& packets, const std::string& output_dir)"] -->|"llama a"| B["libpcap"]

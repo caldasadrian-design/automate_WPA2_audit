@@ -1,0 +1,5 @@
+graph LR
+User["User"] -->|createUser, updateUser, deleteUser, getUserByUsername| PersistenceLayer["PersistenceLayer"]
+Role["Role"] -->|used by User| User
+AuthenticationService["AuthenticationService"] -->|authenticateUser, getUserRoles, updateUserRole| User
+AuthenticationService["AuthenticationService"] -->|getUserRoles, updateUserRole| Role

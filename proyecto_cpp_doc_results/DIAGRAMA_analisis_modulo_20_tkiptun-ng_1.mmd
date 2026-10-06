@@ -1,0 +1,4 @@
+graph LR
+A["do_attack_tkipchop(char* packet)"] -->|"llama a"| B["process_packet(packet)"]
+C["build_arp_request(char* packet, int src_mac, int dst_mac)"] -->|"llama a"| D["configure_arp_request(packet, src_mac, dst_mac)"]
+C["build_arp_request(char* packet, int src_mac, int dst_mac)"] -->|"llama a"| E["encrypt_packet(packet)"]

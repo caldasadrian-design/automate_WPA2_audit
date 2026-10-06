@@ -1,0 +1,12 @@
+graph TD
+M1["process_directory"]
+M2["process_file"]
+M3["main"]
+B1["libpcap"]
+B2["libstat"]
+M1 --> B1
+M2 --> B1
+M3 --> B1
+M1 --> B2
+M2 --> B2
+M3 --> B2
