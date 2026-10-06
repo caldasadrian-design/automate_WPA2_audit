@@ -13,9 +13,11 @@ To make this possible create 3 python scripts to analyze in 3 levels all package
 -- LEVEL FUNCTIONAL: 
 analizar_proyecto_cpp.py
 This process analize each module to describe this components, dependencies and identified problems.
+
 -- LEVEL INTERDEPENDECIES:
 documentar_interdependencias.py
 This process analyze based in the document previous functional and create graphical indications that give us graphical references for each command or process to focus in one of the process in C++ to identify how process works.
+
 -- LEVEL PROCESS LOW LEVEL:
 describir_procesos.py
 This process analyze each block of package in particular to describe how it works low level to understand possible upgrades.
