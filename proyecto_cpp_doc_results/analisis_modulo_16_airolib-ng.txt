@@ -1,0 +1,17 @@
+1. Responsabilidad del módulo: El módulo principal del programa, "main.c", se encarga de parsear los argumentos de la línea de comandos y dirigir el flujo de ejecución al usuario. Además, gestiona la base de datos SQLite y proporciona la interfaz de usuario para el usuario interactivo.
+
+2. Funciones/clases principales: La función principal, `main()`, es el punto de entrada del programa. Es responsable de parsear los argumentos de la línea de comandos y dirigir el flujo de ejecución al usuario. También se ocupa de la base de datos SQLite y proporciona la interfaz de usuario para el usuario interactivo.
+
+3. Dependencias: El archivo principal "main.c" depende de otros archivos para funcionar correctamente. Estos archivos son:
+- "common.h": contiene las declaraciones de las funciones comunes, como `sql_stdout`, `print_help`, `check_for_db` y `print_stats`.
+- "export.c": contiene las funciones para exportar la base de datos a diferentes formatos, como `export_cowpatty` y `export_ascii`.
+- "import.c": contiene las funciones para importar datos en diferentes formatos, como `import_cowpatty` y `import_ascii`.
+- "sqlite3.h": es una biblioteca de SQLite que proporciona la funcionalidad de base de datos SQLite para el programa.
+
+4. Problemas identificados: No se han identificado problemas conocidos en este momento.
+
+5. Sugerencias de mejora: Una sugerencia para mejorar el código es la posibilidad de incluir una opción para la creación de una base de datos nueva. Esto podría hacerse agregando una nueva opción al comando de línea de comandos para especificar la ruta de la nueva base de datos.
+
+Por otro lado, se puede añadir una opción para buscar en la base de datos. Esto podría hacerse agregando una nueva opción al comando de línea de comandos para especificar el término de búsqueda.
+
+También sería bueno añadir una opción para ordenar la salida de la base de datos. Esto podría hacerse agregando una nueva opción al comando de línea de comandos para especificar el campo por el cual se debe ordenar la salida.

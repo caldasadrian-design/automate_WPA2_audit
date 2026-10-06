@@ -1,0 +1,22 @@
+1. Responsabilidad del módulo:
+El módulo `console_codes.h` se encarga de proporcionar funciones para manejar la manipulación de la consola a través de ANSI/VT100 escapes. Esto incluye movimiento de cursor, manipulación de texto, etc.
+
+2. Funciones/clases principales:
+Las principales funciones que proporciona este módulo son `move_cursor`, `move`, `erase_display`, `erase_line`, `textcolor_normal`, `hide_cursor`, `show_cursor`, `mygetch` y `console_utf8_enable`.
+
+3. Dependencias:
+Este módulo no tiene dependencias directas del resto del código, pero depende del módulo `utils.h` para manejar la manipulación de cadenas.
+
+4. Problemas identificados:
+Un problema potencialmente crítico puede ser que el manejo de la entrada no es compatible con la compilación en Windows.
+
+5. Sugerencias de mejora:
+Un aspecto a mejorar podría ser la separación de la manipulación de la consola para sistemas UNIX y Windows, ya que el código para Windows puede utilizarse en entornos que no son UNIX.
+
+También sería bueno proporcionar funciones adicionales para otros sistemas operativos en lugar de depender de la plataforma.
+
+El manejo de errores en la función `mygetch` puede mejorarse proporcionando un valor de retorno para indicar si se leyó correctamente una tecla.
+
+La función `move` no proporciona una manera útil de mover el cursor hacia el borde superior o derecho, por lo que podría mejorarse con funciones adicionales para mover el cursor a las esquinas.
+
+Por último, los comentarios y la documentación podrían mejorarse para explicar mejor el propósito y cómo se usa cada función.

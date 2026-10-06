@@ -1,0 +1,13 @@
+graph TD
+A["main.c"] -->|"llama a"| B["common.h"]
+B["common.h"] -->|"contiene"| C["sql_stdout"]
+B["common.h"] -->|"contiene"| D["print_help"]
+B["common.h"] -->|"contiene"| E["check_for_db"]
+B["common.h"] -->|"contiene"| F["print_stats"]
+A["main.c"] -->|"llama a"| G["export.c"]
+G["export.c"] -->|"contiene"| H["export_cowpatty"]
+G["export.c"] -->|"contiene"| I["export_ascii"]
+A["main.c"] -->|"llama a"| J["import.c"]
+J["import.c"] -->|"contiene"| K["import_cowpatty"]
+J["import.c"] -->|"contiene"| L["import_ascii"]
+A["main.c"] -->|"depende de"| M["sqlite3.h"]

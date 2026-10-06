@@ -1,0 +1,15 @@
+1. Responsabilidad del módulo: El módulo de detección de cloaking WEP tiene la responsabilidad de manejar la memoria para almacenar los vectores de inicialización (IVs) únicos, y proporcionar funciones para verificar si los datos de un paquete WEP presentan cloaking, es decir, si dos paquetes consecutivos con el mismo IV comparten la misma clave.
+
+2. Funciones/clases principales:
+- `uniqueiv_init`: Inicializa la memoria para almacenar los IVs únicos.
+- `uniqueiv_check`: Verifica si un IV está presente o no.
+- `uniqueiv_wipe`: Libera la memoria reservada para los IVs.
+- `data_init`: Inicializa la memoria para almacenar los datos de los paquetes WEP.
+- `data_check`: Verifica si los datos de un paquete WEP presentan cloaking.
+- `data_wipe`: Libera la memoria reservada para los datos de los paquetes WEP.
+
+3. Dependencias: El módulo no tiene dependencias.
+
+4. Problemas identificados: No se han identificado problemas conocidos en este momento.
+
+5. Sugerencias de mejora: Una sugerencia para mejorar el módulo sería implementar la búsqueda binaria para encontrar el IV en lugar de la búsqueda secuencial, lo cual podría mejorar el rendimiento de la búsqueda de IVs en el caso de grandes volúmenes de datos. También sería bueno agregar un límite a la cantidad de memoria que se puede reservar para los IVs para evitar problemas de memoria insuficiente.

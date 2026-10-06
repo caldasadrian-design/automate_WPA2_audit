@@ -1,0 +1,9 @@
+1. Responsabilidad del módulo: El módulo se encarga de leer paquetes de una captura de red desde un archivo, filtrar los paquetes de control y de datos que tienen una dirección de red específica, marcar los paquetes enmascarados y escribir los paquetes filtrados en archivos de salida.
+
+2. Funciones/clases principales: Las funciones principales son `read_packets()`, `check_for_cloaking()` y `write_packets()`.
+
+3. Dependencias: El módulo depende de la biblioteca libpcap para la lectura y escritura de paquetes de red.
+
+4. Problemas identificados: El código tiene algunas secciones que pueden ser difíciles de entender, como la generación de nombres de archivos de salida y la comprobación de la seguridad WEP. Además, la función `check_for_cloaking()` parece estar diseñada para marcar los paquetes enmascarados, pero realiza un filtrado en lugar de una marca.
+
+5. Sugerencias de mejora: Podría ser útil dividir el código en módulos más pequeños y con nombre más descriptivos. Por ejemplo, podríamos tener un módulo para leer y escribir paquetes, otro para filtrar paquetes y otro para generar estadísticas. De esta manera, cada módulo podría ser testeado y depurado de forma aislada. Además, la función `check_for_cloaking()` podría ser refactorizada para mejorar su funcionalidad y legibilidad.

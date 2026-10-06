@@ -1,0 +1,15 @@
+1. Responsabilidad del módulo:
+El módulo de estación está diseñado para manejar la información de las estaciones (STAs) detectadas en el medio Wi-Fi. Proporciona la lista enlazada de las estaciones detectadas y su información relevante para su posterior análisis y manejo.
+
+2. Funciones/clases principales:
+- AP_info: contiene toda la información relacionada con el punto de acceso (AP) al que pertenece la estación.
+- ST_info: almacena toda la información relacionada con la estación. Proporciona una lista enlazada de las estaciones y su información relevante.
+
+3. Dependencias:
+Este módulo depende de otros módulos como el de autenticación y el de fuerza bruta. También depende de bibliotecas externas como libnl para la manipulación de paquetes de red y libgcrypt para la generación de claves de WPA.
+
+4. Problemas identificados:
+Se ha encontrado un problema en el módulo de fuerza bruta, ya que el manejo de la lista enlazada de ST_info no es seguro. Debido a la naturaleza de la lista enlazada, se deben implementar medidas de seguridad para evitar condiciones de carrera.
+
+5. Sugerencias de mejora:
+Para mejorar la seguridad del módulo de fuerza bruta, se recomienda la implementación de semáforos o mutexes para controlar el acceso a la lista enlazada de ST_info. Además, la implementación de pruebas unitarias para el módulo de fuerza bruta podría ayudar a detectar y resolver problemas más adelante.

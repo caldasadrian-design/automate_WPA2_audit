@@ -1,0 +1,33 @@
+Responsabilidad del módulo:
+El módulo proporcionado se encarga de analizar y descifrar paquetes de datos WEP y WPA en archivos de captura de redes 802.11.
+
+Funciones/clases principales:
+Las funciones principales son calc_ptk(), decrypt_data(), print_usage(), c_avl_pick(), c_avl_destroy() y main().
+
+Dependencias:
+La dependencia principal es libcrypto (libssl-dev en Ubuntu), que proporciona la implementación de cifrado y descifrado de datos WEP y WPA.
+
+Problemas identificados:
+1. No se ha identificado ningún problema conocido al respecto.
+
+Sugerencias de mejora:
+1. La función calc_ptk() podría ser modularizada para separar la lógica de cálculo de las claves de la lógica principal del programa.
+2. La función decrypt_data() podría ser simplificada y optimizada.
+3. La implementación actual sólo admite cifrado WEP-40 y WEP-104. Mejorar la compatibilidad para otras versiones de WEP.
+4. Mejorar la documentación del código para reflejar claramente la funcionalidad de cada función y su uso.
+5. Agregar soporte para otras variantes de WPA, como WPA2, y para cifrado de datos TKIP y CCMP.
+6. Mejorar el manejo de errores y excepciones. La implementación actual puede generar errores en caso de fallos.
+7. Agregar soporte para la captura de paquetes en tiempo real, en lugar de solo analizar archivos de captura.
+8. Incorporar pruebas unitarias y de integración para asegurar la funcionalidad del código.
+9. Implementar un sistema de mensajes de error y de advertencia más robusto y detallado.
+10. Mejorar el aspecto de la interfaz de línea de comandos, especialmente la ayuda y la presentación de mensajes de error y de advertencia.
+11. Agregar un manejo eficiente de la memoria. El código actual puede tener problemas de memoria si se proporcionan archivos de captura de gran tamaño.
+12. Agregar soporte para el protocolo WDS (Wireless Direct Streaming).
+13. Implementar soporte para la compresión LZ77 en los paquetes de datos para aumentar la complejidad del cifrado WEP-40.
+14. Implementar la compatibilidad para la autenticación EAP-FAST.
+15. Agregar soporte para la captura de paquetes en tiempo real.
+16. Mejorar la optimización de las rutinas de cifrado y descifrado de datos.
+17. Agregar soporte para la generación automática de claves de PMK (Pairwise Master Key).
+18. Implementar soporte para la encriptación y la desencriptación de datos TKIP y CCMP.
+19. Agregar soporte para la generación automática de claves de PMK (Pairwise Master Key).
+20. Implementar un sistema de depuración y seguimiento para ayudar a encontrar problemas y optimizar el rendimiento del programa.

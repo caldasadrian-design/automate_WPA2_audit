@@ -1,0 +1,14 @@
+Responsabilidad del módulo:
+Este módulo se encarga de proporcionar definiciones y funciones específicas para el protocolo 802.11 y el manejo de duraciones de los frames en la capa física.
+
+Funciones/clases principales:
+Se definieron constantes para las duraciones de los frames en la capa física, como el tamaño mínimo y máximo de un frame RTS, el tamaño mínimo y máximo de fragmentación de un frame TX, y las duraciones específicas para PHY en DSSS (Direct Sequence Spread Spectrum). También se definieron estructuras para manejar las duraciones de los frames en tiempo real.
+
+Dependencias:
+Este módulo depende de otros módulos específicos del sistema operativo para definiciones comunes, como el tamaño de los buffers de datos y los tamaños de los headers de frame.
+
+Problemas identificados:
+No se identificaron problemas conocidos al momento de redactar este informe.
+
+Sugerencias de mejora:
+Sin sugerencias conocidas al momento de redactar este informe.

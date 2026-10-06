@@ -1,0 +1,21 @@
+1. Responsabilidad del módulo:
+El módulo se encarga de analizar los datos de las intervenciones de WEP (Wired Equivalent Privacy) a partir de un archivo IVS (Intervention Vector Set). Este módulo utiliza la información proporcionada para generar conclusiones sobre las posibles claves WEP usadas para cifrar los datos.
+
+2. Funciones/clases principales:
+La función principal de este módulo es `main`. Esta función lee los datos del archivo IVS, realiza el análisis de las intervenciones y genera conclusiones sobre las posibles claves WEP usadas para cifrar los datos.
+
+3. Dependencias:
+Este módulo depende de los archivos `attacks.c` y `attacks.h`, que contienen las implementaciones de las distintas formas de atacar a WEP y de la estructura `vote`.
+
+4. Problemas identificados:
+- Se identificó que el archivo IVS proporcionado puede no estar bien formado. Actualmente, el módulo no maneja el caso en que el archivo no esté bien formado.
+- También se identificó que el cálculo de votos es relativamente pesado y puede afectar el rendimiento.
+
+5. Sugerencias de mejora:
+- El módulo debería validar que el archivo IVS esté bien formado antes de intentar analizarlo.
+- Se podría optimizar el cálculo de votos, lo cual podría mejorar el rendimiento.
+- Se podría implementar un sistema de avisos para las situaciones de malformación del archivo IVS.
+- Se podría agregar la opción de elegir qué ataques de WEP se deben considerar al realizar el análisis.
+- Se podría agregar un modo interactivo para que el usuario pueda elegir la clave WEP a analizar.
+- Se podría agregar la opción de exportar los resultados a un archivo de salida.
+- Se podría implementar una interfaz gráfica para proporcionar una experiencia de usuario más amigable.

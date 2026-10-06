@@ -1,0 +1,17 @@
+1. Responsabilidad del módulo:
+El módulo de captura de paquetes se encarga de abrir archivos de captura de redes en formato de archivo de WLAN (Wireshark) y leer los paquetes de la red. También se encarga de procesar los paquetes y extraer información relevante.
+
+2. Funciones/clases principales:
+- `wi_open`: Abre un archivo de captura de redes en formato de archivo de WLAN y devuelve un descriptor de archivo correspondiente.
+- `wi_read`: Lee un paquete de la red a través del descriptor de archivo y lo devuelve en formato binario.
+- `wi_close`: Cierra el descriptor de archivo correspondiente a un archivo de captura de redes.
+- `process_packet`: Procesa un paquete en formato binario y lo convierte en un formato más legible y fácil de trabajar.
+
+3. Dependencias:
+El módulo de captura de paquetes depende de la biblioteca de Wireshark para leer archivos de captura de redes y de la biblioteca C para manejar archivos y memoria dinámica.
+
+4. Problemas identificados:
+El módulo de captura de paquetes está bien diseñado y se basa en la biblioteca de Wireshark, pero puede ser problemático con archivos de captura de redes grandes debido a la lectura secuencial del archivo.
+
+5. Sugerencias de mejora:
+Una sugerencia de mejora para este módulo es permitir la lectura simultánea del archivo de captura de redes en lugar de hacerlo secuencialmente. Esto puede ayudar a reducir el tiempo de respuesta del sistema al abrir archivos de gran tamaño. Otra sugerencia es proporcionar una interfaz de usuario más avanzada para navegar y buscar paquetes en archivos de captura de redes grandes.

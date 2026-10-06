@@ -1,0 +1,9 @@
+1. Responsabilidad del módulo: Este módulo se encarga de la implementación de las funciones de intercambio de bytes utilizados en la generación de números aleatorios. Su responsabilidad es proveer funciones que permitan intercambiar bytes en un número de una manera específica, ya que es fundamental para la generación de números aleatorios seguros y eficientes.
+
+2. Funciones/clases principales: El módulo principal proporciona las funciones "JOHNSWAP" y "JOHNSWAP64" que intercambian los bytes en un número de 32 bits y de 64 bits respectivamente. También proporciona las macros "ROTATE_LEFT" y "ROTATE_LEFT64" que rotan a la izquierda los bits en un número de 32 bits y de 64 bits respectivamente.
+
+3. Dependencias: El módulo no tiene dependencias fuera del propio proyecto. Sin embargo, puede depender de otros módulos o bibliotecas para proporcionar funcionalidad adicional, como la búsqueda de constantes de compilación o la definición de tipos específicos de la arquitectura.
+
+4. Problemas identificados: Actualmente, el módulo parece estar funcionando según las pruebas realizadas. No se han identificado problemas conocidos o potenciales.
+
+5. Sugerencias de mejora: Se podría mejorar la eficiencia del módulo al proporcionar versiones compiladas con diferentes opciones de compilación para diferentes arquitecturas. Esto podría ayudar a hacer más eficiente el código intercambiando las instrucciones de intercambio de bytes en función de la arquitectura actual.

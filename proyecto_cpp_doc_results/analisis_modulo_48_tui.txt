@@ -1,0 +1,14 @@
+1. Responsabilidad del módulo:
+El módulo proporcionado se encarga de la interfaz de usuario en consola de Aircrack-ng. Controla la presentación de texto, colores, movimiento del cursor, y la manipulación de la consola.
+
+2. Funciones/clases principales:
+Los principales métodos son textcolor, textstyle, moveto, move, erase_display, erase_line, hide_cursor, show_cursor, reset_term y mygetch. Estos métodos controlan el color y formato del texto, mueven el cursor, borran la pantalla y la línea, ocultan y muestran el cursor, restablecen la consola y reciben un caracter sin mostrar en la consola.
+
+3. Dependencias:
+Este módulo depende de la biblioteca estándar de C para operaciones de entrada/salida. No hay dependencias adicionales específicas de Aircrack-ng.
+
+4. Problemas identificados:
+La única posible incompatibilidad podría surgir en entornos no estándar de C, ya que utiliza características de C99 que no son seguramente portables.
+
+5. Sugerencias de mejora:
+Una posible mejora podría incluir soporte para múltiples plataformas, como Windows y MacOS, ya que los métodos de control de consola pueden variar ligeramente entre estas plataformas. Otra mejora podría incluir una interfaz de usuario gráfica para Aircrack-ng, ya que la interfaz de consola puede ser bastante limitada para algunos usuarios.

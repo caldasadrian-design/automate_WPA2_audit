@@ -1,0 +1,46 @@
+Responsabilidad del módulo:
+La responsabilidad del módulo ArcFour es la de proporcionar cifrado de flujo RC4. Este cifrado es considerado débil y debido a esto, se recomienda usar cifrados más fuertes para la seguridad de la información.
+
+Funciones/clases principales:
+Los archivos principales que deben proporcionarse en este módulo son arcfour.h y arcfour.c.
+
+Dependencias:
+Este módulo depende de los módulos Crypto y Buffers para el manejo de la memoria y la implementación de las funciones de cifrado.
+
+Problemas identificados:
+El único problema conocido en este módulo es que no implementa el cifrado de flujo. El módulo sólo proporciona la clave y no permite el cifrado o descifrado de datos.
+
+Sugerencias de mejora:
+Una de las sugerencias de mejora para este módulo sería agregar la implementación del cifrado de flujo RC4 en el archivo arcfour.c.
+
+```c
+int Cipher_RC4( Cipher_RC4_KEY  *ctx, size_t length,
+                const uint8_t input[static length],
+                uint8_t output[static length] )
+{
+    uint8_t x, y, z, index1, index2;
+    uint8_t *m = ctx->m;
+
+    index1 = ctx->x;
+    index2 = ctx->y;
+
+    for (z = 0; z < length; ++z)
+    {
+        index1 = (index1 + 1) % 256;
+        index2 = (index2 + m[index1]) % 256;
+
+        x = m[index1];
+        m[index1] = m[index2];
+        m[index2] = x;
+
+        output[z] = input[z] ^ m[(m[index1] + m[index2]) % 256];
+    }
+
+    ctx->x = index1;
+    ctx->y = index2;
+
+    return 0;
+}
+```
+
+La función Cipher_RC4 implementa el algoritmo de cifrado RC4 y se encarga de generar el flujo cifrado a partir de una clave y de datos de entrada.

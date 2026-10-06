@@ -1,0 +1,15 @@
+1. Responsabilidad del módulo: El módulo de captura de paquetes proporciona la funcionalidad necesaria para capturar y enviar paquetes de red.
+
+2. Funciones/clases principales: 
+   - `CYGWIN_DLL_INIT`: Inicializa la captura de paquetes con la tarjeta de red especificada.
+   - `CYGWIN_DLL_SET_CHAN`: Establece el canal de la tarjeta de red.
+   - `CYGWIN_DLL_INJECT`: Inyecta un paquete de red en la tarjeta de red.
+   - `CYGWIN_DLL_SNIFF`: Captura un paquete de red de la tarjeta de red.
+   - `CYGWIN_DLL_GET_MAC` y `CYGWIN_DLL_SET_MAC`: Obtiene y establece la dirección MAC de la tarjeta de red.
+   - `CYGWIN_DLL_CLOSE`: Libera todos los recursos asociados con la captura de paquetes.
+
+3. Dependencias: El módulo depende de la biblioteca `net_peek` para capturar y enviar paquetes de red. También utiliza pthread para sincronizar el acceso a los recursos.
+
+4. Problemas identificados: El módulo fue probado y parece funcionar correctamente. Sin embargo, no se han encontrado problemas conocidos.
+
+5. Sugerencias de mejora: Se pueden realizar mejoras para mejorar la soporte para diferentes tipos de plataformas y para optimizar la captura de paquetes. También puede mejorar la interfaz de usuario proporcionando una manera más fácil de configurar y administrar la captura de paquetes.

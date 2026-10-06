@@ -1,0 +1,23 @@
+1. Responsabilidad del módulo:
+El módulo de ataque TKIPCHOP está diseñado para realizar un ataque de interceptación de TKIP (Temporal Key Integrity Protocol) en el contexto de las redes inalámbricas 802.11. Su objetivo es crear un keystream a partir de un paquete interceptado, obtener el texto plano y calcular la clave de integridad del mensaje (MIC) para determinar la clave de sincronización del TKIP.
+
+2. Funciones/clases principales:
+Las principales funciones o clases del módulo son:
+- do_attack_tkipchop: realiza el ataque TKIPCHOP.
+- build_arp_request: construye un ARP request con el protocolo TKIP encriptado.
+
+3. Dependencias:
+El módulo TKIPCHOP depende de librerías externas para el manejo de paquetes de redes e internas para el cálculo de la clave de sincronización del TKIP.
+
+4. Problemas identificados:
+Se identificaron algunos problemas potenciales en el módulo, como la falta de pruebas y validaciones en las entradas. Además, la complejidad de la implementación y posibles errores de interpretación de los paquetes de red.
+
+5. Sugerencias de mejora:
+Algunas sugerencias para mejorar el módulo incluyen:
+- Agregar pruebas unitarias para las entradas y verificar su validez.
+- Implementar un manejo de errores más robusto para la interpretación de los paquetes de red.
+- Incorporar un mecanismo para medir el tiempo de ejecución y proporcionar mensajes de progreso al usuario.
+- Documentar claramente el código para mejorar la comprensión y facilitar la colaboración.
+- Crear un mecanismo para detectar y manejar situaciones en las que el paquete interceptado no contenga la cabecera de TKIP.
+- Proporcionar un mecanismo para determinar el tipo de encriptación usada en el paquete interceptado (WEP, WPA, etc.).
+- Considerar la posibilidad de integrar el módulo en herramientas de Wi-Fi forense más grandes, proporcionando una interfaz de usuario más amigable y extendiendo sus capacidades.

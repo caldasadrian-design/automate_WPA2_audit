@@ -1,0 +1,15 @@
+1. Responsabilidad del módulo: El módulo tiene como responsabilidad la gestión de la red en el sistema Cygwin. Proporciona la funcionalidad para resetear la tarjeta de red, establecer la dirección MAC y cerrar la conexión.
+
+2. Funciones/clases principales: El módulo posee las siguientes funciones/clases principales:
+   - `reset(struct cstate *)`: Función que resuelve el problema del lector bloqueado y reinicia la biblioteca.
+   - `cygwin_set_mac(unsigned char *)`: Función que establece una nueva dirección MAC en la tarjeta de red.
+   - `cygwin_close(void)`: Función que cierra la conexión con la biblioteca y el registro de Windows.
+
+3. Dependencias: El módulo depende de las siguientes bibliotecas:
+   - setupapi.lib: Para la administración de dispositivos de red.
+   - iphlpapi.lib: Para la administración de direcciones IP y de las interfaces de red.
+   - kernel32.lib: Para el acceso al registro de Windows y la administración de recursos.
+
+4. Problemas identificados: El módulo está actualmente probado en entornos Windows y Cygwin, pero se han identificado problemas en entornos Linux. El módulo también presenta un error al intentar establecer una dirección MAC en la tarjeta de red en el momento de la prueba.
+
+5. Sugerencias de mejora: En lugar de usar Cygwin y depender de su biblioteca de red, podríamos mejorar la integración con la red del sistema operativo nativo. Esto podría incluir la utilización de interfaces de red nativas en lugar de usar Cygwin. También podríamos mejorar la compatibilidad con distintos sistemas operativos, ya que actualmente solo funciona en Windows.

@@ -1,0 +1,26 @@
+1. Responsabilidad del módulo: Este módulo proporciona las estructuras de datos y operaciones necesarias para trabajar con árboles AVL. También proporciona iteradores para recorrer los elementos del árbol en orden.
+
+2. Funciones/clases principales:
+   - c_avl_create: crea un nuevo árbol AVL vacío.
+   - c_avl_insert: inserta una nueva clave y su valor en el árbol.
+   - c_avl_get: busca una clave en el árbol y devuelve su valor.
+   - c_avl_pick: elimina y devuelve la clave con el valor más alto o más bajo según el parámetro "mode".
+   - c_avl_get_iterator: crea un nuevo iterador para recorrer el árbol.
+   - c_avl_iterator_next: avanza al siguiente nodo del árbol con el iterador.
+   - c_avl_iterator_prev: avanza al nodo anterior en el árbol con el iterador.
+   - c_avl_iterator_destroy: destruye el iterador.
+   - c_avl_size: devuelve el número de elementos en el árbol.
+
+3. Dependencias: este módulo no tiene dependencias.
+
+4. Problemas identificados: aunque este módulo es funcional y se ajusta a las expectativas, puede mejorarse.
+
+5. Sugerencias de mejora: algunas de las sugerencias de mejora que se pueden implementar son:
+   - Agregar la función para buscar una clave en el árbol, ya que actualmente está implementado pero no es utilizado en el código principal.
+   - Agregar la función para eliminar una clave del árbol, ya que actualmente está implementado pero no es utilizado en el código principal.
+   - Agregar la función para comprobar si una clave está en el árbol.
+   - Agregar la función para determinar si el árbol está vacío.
+   - Agregar la función para limpiar el árbol.
+   - Optimizar el código para aumentar la eficiencia.
+   - Implementar pruebas unitarias para asegurar que el código está funcionando correctamente.
+   - Documentar de forma adecuada el código para que sea más fácil de entender para otros desarrolladores.

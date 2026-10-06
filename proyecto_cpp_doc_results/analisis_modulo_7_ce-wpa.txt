@@ -1,0 +1,14 @@
+1. Responsabilidad del módulo: El módulo principal de la aplicación es la funcionalidad de cifrado y descifrado de mensajes usando claves de cifrado de doble raya (WPA2-Enterprise). Está encargado de manejar la inicialización, la generación de claves y la aplicación de la cifrado de la información a los mensajes de red.
+
+2. Funciones/clases principales: El módulo principal contiene las siguientes clases y funciones:
+   - `init_wpapsk()`: Esta función es la principal del módulo y se encarga de inicializar la cifrado de doble raya.
+   - `wpapsk_sse()`: Esta función maneja la cifrado y descifrado de la información de la red utilizando la biblioteca SSE para acelerar los cálculos.
+   - `init_atoi()`: Esta función inicializa un array que se utiliza para convertir de ASCII a enteros y viceversa.
+
+3. Dependencias: El módulo principal depende de los siguientes módulos:
+   - `ac_crypto_engine_t`: Este módulo maneja la inicialización y el manejo general de la biblioteca de cifrado.
+   - `wpapsk_password`: Este módulo maneja la estructura de las claves de cifrado WPA2-Enterprise.
+
+4. Problemas identificados: Se ha identificado un problema relacionado con la compatibilidad entre la biblioteca de cifrado y la versión de Windows del sistema operativo. Este problema afecta a las versiones de Windows 8 y 10 y puede afectar a la seguridad de la aplicación.
+
+5. Sugerencias de mejora: Se sugieren algunas mejoras para el módulo principal de la aplicación. Por ejemplo, se puede añadir soporte para la versión de Windows 10 más reciente, ya que la biblioteca de cifrado no es compatible con la versión más reciente de Windows. También, se puede optimizar el código para mejorar el rendimiento de la aplicación.

@@ -1,0 +1,12 @@
+1. Responsabilidad del módulo: Este módulo tiene la responsabilidad de capturar y procesar paquetes de red entrantes para detectar y responder a los mensajes de eco.
+
+2. Funciones/clases principales: Este módulo tiene clases y funciones principales que incluyen:
+   - `main`: Esta función es el punto de entrada al programa. Se encarga de abrir el dispositivo de red, compilar y aplicar el filtro de paquetes, y ejecutar el bucle de captura de paquetes.
+   - `receive_packet`: Esta función es llamada por `pcap_loop` para cada paquete capturado. Verifica si el paquete es un mensaje de eco y, en caso afirmativo, responde al mismo.
+   - `reply_icmp_echo`: Esta función crea y envía un paquete de respuesta ICMP.
+
+3. Dependencias: Este módulo depende de la biblioteca pcap para capturar paquetes de red y de la biblioteca netinet para manipular encabezados de red.
+
+4. Problemas identificados: No se han identificado problemas conocidos en este momento.
+
+5. Sugerencias de mejora: Un posible mejoramiento podría ser la creación de un módulo separado para enviar respuestas al módulo de red. Esto podría permitir la reutilización de código para enviar paquetes ICMP en lugar de solo responder a los mensajes de eco.

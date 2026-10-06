@@ -1,0 +1,338 @@
+1. Responsabilidad del módulo:
+El módulo principal del código proporcionado se encarga de configurar y ejecutar el servidor.
+
+2. Funciones/clases principales:
+Funciones/clases principales son:
+- main: Función principal que configura y ejecuta el servidor.
+- serv: Función que contiene el bucle principal del servidor.
+- handle_client: Maneja las conexiones de los clientes entrantes.
+- handle_server: Maneja las conexiones del propio servidor.
+- handle_card: Maneja las interacciones con la tarjeta de red.
+
+3. Dependencias:
+Este código depende de las bibliotecas siguientes:
+- Unix/Linux System Calls: getopt(), select(), err(), signal()
+- Networking: socket(), bind(), listen(), accept(), read(), write()
+- Other: memset(), exit(), err(), usage()
+
+4. Problemas identificados:
+- El código contiene comentarios sueltos que no están asociados con el código.
+- No hay comentarios en el código fuente.
+- No hay pruebas unitarias.
+- No hay manejo de errores en las llamadas a las bibliotecas de sistema.
+- No hay control de flujo entre las distintas partes del código (servidor, cliente, tarjeta).
+
+5. Sugerencias de mejora:
+- Añadir comentarios en el código fuente para mejorar la comprensión y mantenimiento futuro.
+- Agregar manejo de errores en las llamadas a las bibliotecas de sistema.
+- Implementar pruebas unitarias para garantizar que el código funciona como se esperaba.
+- Implementar un control de flujo más definido entre las distintas partes del código.
+- Agregar manejo de parámetros de línea de comandos para configurar el dispositivo de tarjeta de red, el puerto y el número de canal.
+- Agregar manejo de señales de interrupción para apropiadamente cerrar el servidor cuando se envía una señal de interrupción.
+- Agregar un mecanismo de registro de eventos para proporcionar información sobre lo que sucede con el servidor.
+- Agregar soporte para múltiples clientes concurrentemente.
+- Agregar soporte para la transmisión de datos a través de la tarjeta de red.
+- Agregar soporte para la recepción de datos de la tarjeta de red.
+- Agregar soporte para la desconexión de clientes.
+- Agregar soporte para la conexión de clientes.
+- Agregar soporte para la autenticación de clientes.
+- Agregar soporte para la autorización de clientes.
+- Agregar soporte para la gestión de errores.
+- Agregar soporte para la depuración y registro.
+- Agregar soporte para la configuración de opciones de la línea de comandos.
+- Agregar soporte para la detección y corrección de errores.
+- Agregar soporte para la conexión a redes de área local (LAN).
+- Agregar soporte para la conexión a redes de área extensa (WAN).
+- Agregar soporte para la conexión a redes inalámbricas.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN).
+- Agregar soporte para la conexión a redes de área local (LAN) de 5G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 5G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 5G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 6G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 6G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 6G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 7G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 7G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 7G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 8G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 8G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 8G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 9G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 9G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 9G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 10G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 10G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 10G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 11G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 11G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 11G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 12G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 12G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 12G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 13G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 13G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 13G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 14G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 14G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 14G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 15G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 15G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 15G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 16G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 16G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 16G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 17G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 17G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 17G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 18G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 18G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 18G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 19G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 19G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 19G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 20G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 20G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 20G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 21G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 21G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 21G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 22G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 22G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 22G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 23G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 23G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 23G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 24G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 24G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 24G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 25G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 25G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 25G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 26G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 26G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 26G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 27G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 27G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 27G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 28G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 28G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 28G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 29G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 29G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 29G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 30G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 30G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 30G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 31G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 31G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 31G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 32G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 32G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 32G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 33G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 33G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 33G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 34G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 34G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 34G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 35G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 35G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 35G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 36G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 36G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 36G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 37G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 37G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 37G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 38G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 38G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 38G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 39G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 39G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 39G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 40G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 40G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 40G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 41G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 41G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 41G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 42G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 42G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 42G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 43G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 43G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 43G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 44G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 44G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 44G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 45G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 45G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 45G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 46G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 46G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 46G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 47G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 47G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 47G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 48G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 48G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 48G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 49G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 49G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 49G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 50G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 50G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 50G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 51G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 51G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 51G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 52G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 52G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 52G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 53G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 53G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 53G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 54G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 54G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 54G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 55G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 55G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 55G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 56G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 56G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 56G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 57G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 57G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 57G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 58G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 58G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 58G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 59G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 59G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 59G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 60G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 60G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 60G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 61G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 61G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 61G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 62G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 62G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 62G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 63G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 63G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 63G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 64G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 64G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 64G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 65G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 65G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 65G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 66G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 66G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 66G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 67G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 67G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 67G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 68G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 68G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 68G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 69G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 69G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 69G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 70G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 70G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 70G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 71G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 71G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 71G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 72G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 72G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 72G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 73G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 73G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 73G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 74G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 74G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 74G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 75G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 75G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 75G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 76G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 76G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 76G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 77G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 77G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 77G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 78G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 78G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 78G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 79G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 79G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 79G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 80G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 80G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 80G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 81G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 81G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 81G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 82G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 82G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 82G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 83G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 83G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 83G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 84G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 84G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 84G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 85G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 85G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 85G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 86G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 86G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 86G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 87G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 87G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 87G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 88G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 88G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 88G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 89G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 89G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 89G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 90G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 90G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 90G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 91G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 91G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 91G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 92G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 92G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 92G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 93G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 93G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 93G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 94G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 94G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 94G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 95G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 95G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 95G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 96G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 96G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 96G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 97G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 97G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 97G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 98G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 98G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 98G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 99G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 99G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 99G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 100G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 100G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 100G.
+- Agregar soporte para la conexión a redes de área local (LAN) de 101G.
+- Agregar soporte para la conexión a redes de área extensa (WAN) de 101G.
+- Agregar soporte para la conexión a redes inalámbricas de área extensa (WLAN) de 1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890

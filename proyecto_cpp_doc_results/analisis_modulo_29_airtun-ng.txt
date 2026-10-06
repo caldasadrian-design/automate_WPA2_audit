@@ -1,0 +1,9 @@
+1. Responsabilidad del módulo: El módulo maneja la captura y reproducción de paquetes de red utilizando el protocolo IEEE 802.11. También se encarga de filtrar paquetes de red si se especifican direcciones MAC de punto de acceso (BSSID), redes y modos de enlace.
+
+2. Funciones/clases principales: `main()`, `read_packet()`, `packet_xmit()`, `packet_recv()`, `send_packet()`.
+
+3. Dependencias: El módulo depende de los módulos "libnet" para la transmisión y recepción de paquetes de red, y "libpcap" para la captura de paquetes de red.
+
+4. Problemas identificados: El módulo puede enfrentarse a problemas relacionados con la sincronización de paquetes de red y la reproducción en tiempo real. Además, el filtrado de paquetes puede ser un poco confuso para los principiantes.
+
+5. Sugerencias de mejora: Se pueden agregar comentarios y documentación adicionales para explicar cómo funciona el filtrado y la reproducción de paquetes de red. También puede ser útil agregar una opción para permitir la captura y reproducción de paquetes de red en tiempo real en lugar de solo reproducción.

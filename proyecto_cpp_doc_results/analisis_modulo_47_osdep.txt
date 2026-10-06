@@ -1,0 +1,14 @@
+Responsabilidad del módulo:
+El módulo proporciona la interfaz de programación de aplicaciones (API) de dependencias operativas específicas para Linux. Esta responsabilidad incluye la conversión de canales de frecuencia a canales y viceversa, que se utilizan en el esquema de canal de 802.11.
+
+Funciones/clases principales:
+Dos funciones principales están disponibles para su uso: getFrequencyFromChannel() y getChannelFromFrequency(). Estas funciones están diseñadas para convertir entre canales y frecuencias en el esquema de canal de 802.11.
+
+Dependencias:
+El módulo depende de la biblioteca estándar de C para su ejecución. También depende de la configuración específica de Linux y de la biblioteca de compilación de la compilación de software.
+
+Problemas identificados:
+Actualmente, el módulo no presenta problemas conocidos. Sin embargo, puede ser necesario ampliar la compatibilidad con sistemas operativos más modernos o aún no soportados por la biblioteca de compilación.
+
+Sugerencias de mejora:
+Una sugerencia de mejora sería mejorar la compatibilidad con la biblioteca de compilación más utilizada en el sistema operativo, ya que proporciona una funcionalidad más completa y actualizada.

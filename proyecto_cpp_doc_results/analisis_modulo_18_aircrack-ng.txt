@@ -1,0 +1,9 @@
+1. Responsabilidad del módulo: El módulo está diseñado para manejar la lógica del cifrado y la fuerza bruta de las redes inalámbricas. Se encarga de insertar claves de cifrado en un AVL (Árbol Binario de Búsqueda Balanceado) para búsquedas eficientes. También maneja la creación y gestión de hilos para ataques de fuerza bruta multihilo.
+
+2. Funciones/clases principales: `main()`, `get_first_target()`, `c_avl_insert()`, `c_avl_size()`, `perform_wep_crack()`, `perform_wpa_crack()`, `session_save_thread()`, `clean_exit()`.
+
+3. Dependencias: El módulo depende de las bibliotecas de C `stdlib.h`, `stdio.h`, `pthread.h` y `unistd.h` para la lógica principal y la gestion del hilo. El árbol AVL está implementado en otro módulo del código fuente.
+
+4. Problemas identificados: Aunque la función `perform_wep_crack()` y `perform_wep_crack()` tienen la responsabilidad de cifrar y descifrar la información para redes WEP y WPA respectivamente, pueden tener problemas con las implementaciones de cifrado y descifrado. Puede haber problemas con la implementación de los algoritmos criptográficos y la elección de la clave de cifrado.
+
+5. Sugerencias de mejora: Mejorar la implementación de las clases de cifrado y descifrado para que sea más eficiente y robusta. Se pueden agregar pruebas de robustez y rendimiento para asegurarse de que las implementaciones sean aceptables. También sería útil agregar soporte para más tipos de cifrado.

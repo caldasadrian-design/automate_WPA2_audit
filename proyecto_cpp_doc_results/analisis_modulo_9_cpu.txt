@@ -1,0 +1,9 @@
+1. Responsabilidad del módulo: El módulo trata de determinar la compatibilidad del CPU con las capacidades de instrucciones de alto nivel (SIMD). Esto incluye la capacidad para ejecutar operaciones de punto flotante SIMD (Single Instruction, Multiple Data), que son operaciones vectoriales de un solo ciclo de instrucciones.
+
+2. Funciones/clases principales: El módulo proporciona dos funciones principales: `simd_init` y `simd_get_supported_features`. `simd_init` inicializa el hardware SIMD y `simd_get_supported_features` proporciona una máscara de bits indicando qué características SIMD del CPU está soportada.
+
+3. Dependencias: El módulo depende de la biblioteca estándar de C para Linux (glibc). También depende de la biblioteca auxv que proporciona información sobre la arquitectura del hardware.
+
+4. Problemas identificados: Actualmente, no se han identificado problemas conocidos en este módulo.
+
+5. Sugerencias de mejora: Sin conocimiento actual, no se ha detectado ninguna mejora o ajuste para este módulo que creemos que sería útil para el desarrollo. Sin embargo, sería útil agregar soporte para CPU más antiguos que no tienen SIMD, o soporte para nuevas arquitecturas.

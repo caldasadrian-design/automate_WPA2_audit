@@ -1,0 +1,16 @@
+1. Responsabilidad del módulo:
+El módulo de cola circular proporciona una interfaz de programación para colas circulares. Proporciona operaciones para inicializar una cola circular, liberar la memoria ocupada por la cola, restablecer la cola a su estado inicial, insertar elementos a la cola, intentar insertar elementos a la cola, eliminar elementos de la cola y consultar si la cola está vacía o llena.
+
+2. Funciones/clases principales:
+Se proporcionan funciones de utilidad para trabajar con colas circulares, como circular_queue_init, circular_queue_free, circular_queue_reset, circular_queue_push, circular_queue_try_push, circular_queue_pop, circular_queue_is_empty y circular_queue_is_full.
+
+3. Dependencias:
+Ninguna directa, pero puede haber dependencias en el entorno en el que se utilice. Por ejemplo, las funciones que interactúan con la memoria del sistema operativo como memcpy pueden ser dependencias.
+
+4. Problemas identificados:
+Actualmente, no se han identificado problemas conocidos con este módulo.
+
+5. Sugerencias de mejora:
+Una posible mejora sería la inclusión de un mecanismo para detectar errores en tiempo de ejecución, como tratar de insertar elementos en una cola llena o extraer elementos de una cola vacía. También puede ser útil proporcionar otras operaciones sobre las colas, como insertar elementos en una posición específica, obtener el tamaño de la cola, etc.
+
+También puede ser útil proporcionar varias variantes del módulo, como una versión segura para hilos, que no bloquee el procesador al intentar insertar o extraer de una cola vacía o llena.

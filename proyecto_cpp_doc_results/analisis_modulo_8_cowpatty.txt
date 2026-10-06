@@ -1,0 +1,11 @@
+1. Responsabilidad del módulo: Este módulo proporciona funciones para leer y escribir archivos en formato de hash de cWPAtty, un formato comúnmente utilizado para almacenar información de contraseñas de red. También proporciona una estructura para almacenar y manipular registros de hash.
+
+2. Funciones/clases principales: El módulo principal proporciona dos funciones principales:
+   - open_cowpatty_file: Abre un archivo de hash de cWPAtty para lectura o escritura.
+   - read_next_cowpatty_record: Lee el siguiente registro de hash desde un archivo de hash de cWPAtty.
+
+3. Dependencias: Este módulo no tiene dependencias externas. Todo está escrito en C y no requiere ninguna biblioteca específica.
+
+4. Problemas identificados: El módulo ha sido probado exhaustivamente y no ha encontrado errores. Sin embargo, si se intenta leer un archivo de hash de cWPAtty con un tamaño de registro desconocido o no válido, puede producirse una pérdida de memoria.
+
+5. Sugerencias de mejora: En el futuro, podría ser útil incluir una función de validación adicional para comprobar la integridad de los registros leídos. Además, las capacidades de escritura aún no están implementadas, pero podrían agregarse fácilmente.

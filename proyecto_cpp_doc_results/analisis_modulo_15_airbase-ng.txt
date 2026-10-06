@@ -1,0 +1,18 @@
+Responsabilidad del módulo:
+Este módulo se encarga de la captura y transmisión de paquetes de red de manera continua. Implementa funcionalidades como la lectura de paquetes de la interfaz de red, su transmisión a otros módulos y la configuración de parámetros de la interfaz.
+
+Funciones/clases principales:
+Las funciones principales son packet_recv, packet_xmit y packet_xmit_external, encargadas de la recepción, transmisión y transmisión externa de paquetes respectivamente.
+
+Dependencias:
+Este módulo depende de otros módulos tales como modulo de capa de enlace de 802.11 (LLC), modulo de interfaz de red (NI) y modulo de transmisión de paquetes (PP). También depende del kernel de Linux para las llamadas de sistema relacionadas con la interfaz de red.
+
+Problemas identificados:
+En este momento, no se han identificado problemas conocidos en este módulo.
+
+Sugerencias de mejora:
+Se podría mejorar la eficiencia del módulo añadiendo la opción de configuración de una cantidad máxima de paquetes que puede almacenar y transmitir en el momento. Además, agregar soporte para la recepción de paquetes en modo monitor.
+
+Adicionalmente, sería útil implementar una función para la detección automática de la interfaz de red y establecer la dirección MAC adecuada.
+
+Finalmente, se podría mejorar la facilidad de uso del módulo añadiendo una interfaz de línea de comandos simple y útil para la configuración y administración del módulo.

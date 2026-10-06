@@ -1,0 +1,14 @@
+Responsabilidad del módulo:
+El módulo de cifrado de la biblioteca de WPA2 es responsable del cálculo de la clave PMK (Pairwise Master Key) a partir de una clave WPA-PSK proporcionada por el usuario. Este módulo se encarga de la validación de la longitud de la clave, la normalizización de la SSID (Service Set Identifier), la derivación de la PMK y la gestión de los datos criptográficos relacionados con la autenticación y la encriptación.
+
+Funciones/clases principales:
+Las principales funciones en este módulo son ac_crypto_engine_calc_one_pmk y ac_crypto_engine_calc_pmk. La primera calcula la PMK individual a partir de una clave proporcionada por el usuario, mientras que la segunda utiliza el motor de cifrado para calcular la PMK para un conjunto de claves proporcionadas por el usuario.
+
+Dependencias:
+Este módulo depende del módulo de memoria compartida para almacenar y recuperar datos relacionados con la autenticación y la encriptación, y del módulo de cálculo de claves para proporcionar los algoritmos de cálculo de la PMK.
+
+Problemas identificados:
+Actualmente, no se han identificado problemas conocidos en este módulo.
+
+Sugerencias de mejora:
+A medida que se desarrollan nuevas características y mejoras, se pueden introducir mejoras al módulo de cifrado. Algunas sugerencias incluyen la integración de una biblioteca de cifrado de alta seguridad para el cálculo de la PMK y la gestión de datos criptográficos, la optimización del rendimiento, la incorporación de una interfaz de usuario para la configuración de la clave WPA-PSK del usuario y la posibilidad de configurar opciones de seguridad avanzadas.

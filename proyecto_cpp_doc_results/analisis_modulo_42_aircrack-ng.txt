@@ -1,0 +1,18 @@
+1. Responsabilidad del módulo:
+El módulo principal de aircrack-ng, llamado "aircrack-ng.c", es el punto de entrada del programa. Su responsabilidad principal es manejar la línea de comandos, inicializar los datos necesarios y coordinar la fuerza bruta, la detección de modo y la fuerza bruta de clave WEP.
+
+2. Funciones/clases principales:
+Las principales funciones principales son:
+   - crack_handshake(): Coordina la fuerza bruta de clave WPA/WPA2.
+   - brute_crack(): Realiza la fuerza bruta de la clave WEP.
+   - detect_wep_mode(): Detecta el modo de la clave WEP.
+   - build_ptw_table(): Construye la tabla de la fuerza bruta de la clave WEP.
+
+3. Dependencias:
+Depende de varios módulos de la biblioteca de aircrack-ng y de la biblioteca de Crypto y CQueue de Airgeddon, que proporcionan la funcionalidad de cifrado y colas para los hilos. También depende de la biblioteca pthread para la programación multithread y de malloc/free para la gestión de memoria dinámica.
+
+4. Problemas identificados:
+Se ha reportado un problema con la detección del modo de clave WEP en algunos casos.
+
+5. Sugerencias de mejora:
+Se sugieren algunas mejoras para la detección automática del modo de la clave WEP y la fuerza bruta de claves WEP. También se recomienda mejorar la legibilidad del código y hacer que el código sea más fácil de entender y mantener. Por último, se sugiere la posibilidad de mejorar la documentación y la organización del código para que sea más fácil incorporar contribuciones de la comunidad.

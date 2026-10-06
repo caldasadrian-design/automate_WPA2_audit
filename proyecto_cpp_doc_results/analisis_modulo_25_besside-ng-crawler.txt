@@ -1,0 +1,9 @@
+1. Responsabilidad del módulo: El módulo se encarga de la tarea de explorar recursivamente un directorio especificado, abrir todos los archivos en él y buscar pcap-dumpfiles. También realiza la filtración de un único beacon y todos los paquetes EAPOL procedentes de las redes WPA. Posteriormente, guarda los paquetes filtrados en un archivo de salida.
+
+2. Funciones/clases principales: `process_directory`, `process_file`, `main`.
+
+3. Dependencias: El módulo depende de la biblioteca pcap para capturar y guardar paquetes de red. También requiere la biblioteca stat para obtener información sobre archivos y directorios.
+
+4. Problemas identificados: Pocas veces las personas ejecutan este tipo de programas con la versión comprimida de la biblioteca pcap, ya que la versión comprimida no proporciona las funciones necesarias para guardar paquetes.
+
+5. Sugerencias de mejora: Mejorar la interfaz de usuario para que sea más amigable con el usuario. Incluir la capacidad de cancelar la operación y mostrar al usuario el progreso de la operación. También puede agregar la capacidad de volver a intentarlo.

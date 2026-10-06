@@ -1,0 +1,11 @@
+1. Responsabilidad del módulo: El módulo se encarga de leer un archivo de paquetes de red, interpretar sus encabezados y escribir datos de interés (IVs) en un archivo separado.
+
+2. Funciones/clases principales:
+   - `main`: función principal que inicia el proceso de lectura y escritura de archivos de paquetes de red.
+   - `dump_add_packet`: función que recibe un paquete y lo agrega al archivo de IVs.
+
+3. Dependencias: El módulo depende de la función `dump_add_packet` para agregar los paquetes de IVs al archivo. También depende de la biblioteca `libpcap` para leer los archivos de paquetes.
+
+4. Problemas identificados: El módulo asume que las entradas son archivos de paquetes de red válidos. Si se proporcionan archivos de diferente formato, puede causar errores.
+
+5. Sugerencias de mejora: Mejorar la validación de entradas para asegurar que se tratan archivos de paquetes de red válidos. También podría ser beneficioso agregar un sistema de logueo detallado para la solución de problemas.

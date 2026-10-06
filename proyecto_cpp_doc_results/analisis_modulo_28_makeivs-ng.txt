@@ -1,0 +1,11 @@
+1. Responsabilidad del módulo: Este módulo se encarga de generar archivos de IVS (Vector de Inicialización de Secuencia) a partir de un archivo de entrada. El módulo realiza una serie de operaciones encriptográficas para generar el IVS a partir del archivo de entrada.
+
+2. Funciones/clases principales: Este módulo principal se encuentra en el archivo "ivs2.c". En este archivo se encuentran las funciones principales que se encargan de la generación del IVS, tales como generar_ivs(), init_key_stream(), etc.
+
+3. Dependencias: Este módulo depende de los módulos "file_utils.c" y "rand_utils.c" para las funciones relacionadas con el manejo de archivos y la generación de números aleatorios, respectivamente.
+
+4. Problemas identificados: Algunos problemas identificados en este módulo son la falta de comentarios y la mala definición de algunas funciones. Además, algunas funciones no están bien documentadas y pueden ser confusas para otros desarrolladores que trabajen en el mismo proyecto.
+
+5. Sugerencias de mejora: Una de las sugerencias de mejora para este módulo sería la adición de comentarios y documentación exhaustiva a las funciones para facilitar su comprensión para futuros desarrolladores. También sería bueno implementar un sistema de control de versiones para ayudar a controlar los cambios y actualizaciones que puedan surgir en el futuro.
+
+Otra sugerencia de mejora podría ser la adición de pruebas unitarias para comprobar el correcto funcionamiento del módulo. Por último, se podría mejorar la eficiencia del código, especialmente en las funciones relacionadas con la generación de la secuencia de IVS.

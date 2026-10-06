@@ -1,0 +1,22 @@
+Responsabilidad del módulo:
+
+Este módulo proporciona compatibilidad entre el código fuente de aircrack-ng y las bibliotecas PCRE (Perl-Compatible Regular Expressions). PCRE es una biblioteca de expresiones regulares flexible que permite al desarrollador usar patrones de expresiones regulares para buscar, reemplazar y manipular textos de una manera similar a cómo lo hace Perl.
+
+Funciones/clases principales:
+
+Este módulo proporciona macro (COMPAT_PCRE_COMPILE, COMPAT_PCRE_MATCH, COMPAT_PCRE_PRINT_ERROR) que permiten compilar expresiones regulares, ejecutar las expresiones compiladas y imprimir errores respectivamente.
+
+Dependencias:
+
+1. Este módulo depende de bibliotecas de expresiones regulares específicas (pcre.h o pcre2.h), que deben estar instaladas en el sistema.
+2. Este módulo depende de una macro de preprocesador (HAVE_PCRE o HAVE_PCRE2) que establece qué biblioteca de expresiones regulares usar. Esta dependencia depende del sistema de compilación del proyecto y su configuración.
+
+Problemas identificados:
+
+1. El módulo no proporciona clases o funciones para la manipulación de expresiones regulares, solo permite compilar y ejecutar expresiones regulares.
+2. El código no está bien documentado, lo que complica la comprensión y la modificación del mismo.
+
+Sugerencias de mejora:
+
+1. Agregar clases o funciones para la manipulación de expresiones regulares podría mejorar la funcionalidad del módulo.
+2. Documentar mejor el código para facilitar su comprensión y modificación.
