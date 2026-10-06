@@ -1,0 +1,7 @@
+graph LR
+A[AP_info] -->|pertenece| B[ST_info]
+B[ST_info] -->|contiene| C[ST_info_list]
+D[Estación] -->|gestiona| E[AP_info]
+F[Estación] -->|gestiona| G[ST_info_list]
+H[Autenticación] -->|depende| E[Estación]
+I[Forzar Bruta] -->|depende| F[Estación]

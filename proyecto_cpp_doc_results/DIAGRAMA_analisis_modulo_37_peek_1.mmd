@@ -1,0 +1,5 @@
+graph TD
+A[Captura de paquetes] -->|"depende de"| B[net_peek]
+B[net_peek] -->|"usada por"| A
+A -->|"usa"| C[pthread]
+C[pthread] -->|"usada por"| A
