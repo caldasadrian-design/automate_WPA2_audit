@@ -1,0 +1,274 @@
+//============================================================================
+// Name        : WL_BulkLoader.cpp
+// Description : Bulk insert (UltraFast) desde archivo masivos de hasta 82,7GB
+// con carga masiva usando POSIX I/O y streaming directo a COPY
+// Compilar    : g++ -O3 -std=c++17 WL_BulkLoader.cpp -lpq -o wl_loader
+//============================================================================
+
+#include <iostream>
+#include <chrono>
+#include <iomanip>
+#include <vector>
+#include <fcntl.h>      // Para open()
+#include <unistd.h>     // Para read(), close()
+#include <sys/stat.h>   // Para stat()
+#include <libpq-fe.h>
+#include <fstream>  // Para el log de errores
+
+// Estructura para registrar errores
+struct ErrorRecord {
+    uint64_t byte_offset;
+    uint64_t line_number;
+    std::string error_type;
+    std::string raw_hex;
+    std::string sanitized;
+    std::string strategy;
+};
+
+// Función auxiliar: convertir bytes a hex para el log
+std::string bytes_to_hex(const char* data, size_t len) {
+    std::string hex;
+    hex.reserve(len * 2);
+    for (size_t i = 0; i < len; ++i) {
+        char buf[3];
+        snprintf(buf, sizeof(buf), "%02X", (unsigned char)data[i]);
+        hex += buf;
+    }
+    return hex;
+}
+
+// Función auxiliar: extraer la línea completa donde está el error
+std::string extract_line_context(const char* buffer, ssize_t pos, ssize_t bytes_read) {
+    // Buscar inicio de línea
+    ssize_t start = pos;
+    while (start > 0 && buffer[start - 1] != '\n') --start;
+
+    // Buscar fin de línea
+    ssize_t end = pos;
+    while (end < bytes_read && buffer[end] != '\n') ++end;
+
+    size_t len = end - start;
+    if (len > 200) len = 200; // Truncar para el log
+
+    return std::string(buffer + start, len);
+}
+
+
+int main() {
+    const std::string input_file = "/home/adri/CRC-Sessions/Diccionarios/wl.txt";
+    const char* conninfo = "dbname=WL user=postgres password=postgres host=localhost port=5432";
+
+    // 1. Conectar
+    PGconn* conn = PQconnectdb(conninfo);
+    if (PQstatus(conn) != CONNECTION_OK) {
+        std::cerr << "Error de conexión: " << PQerrorMessage(conn) << std::endl;
+        return 1;
+    }
+
+    // 2. Truncar tabla
+    std::cout << "Limpiando tabla..." << std::endl;
+    PGresult* res = PQexec(conn, "TRUNCATE TABLE \"PW\"");
+    if (PQresultStatus(res) != PGRES_COMMAND_OK) {
+        std::cerr << "Error truncando: " << PQerrorMessage(conn) << std::endl;
+        PQclear(res); PQfinish(conn); return 1;
+    }
+    PQclear(res);
+
+    // 3. Abrir archivo a bajo nivel (POSIX)
+    int fd = open(input_file.c_str(), O_RDONLY);
+    if (fd == -1) {
+        std::cerr << "Error abriendo archivo: " << input_file << std::endl;
+        PQfinish(conn); return 1;
+    }
+
+    // Obtener tamaño del archivo para el progreso
+    struct stat st;
+    fstat(fd, &st);
+    uint64_t file_size = st.st_size;
+    std::cout << "Archivo abierto. Tamaño: " << (file_size / (1024.0 * 1024.0 * 1024.0)) << " GB" << std::endl;
+
+    // Dentro del main(), después de abrir el archivo:
+    std::ofstream error_log("/home/adri/pw_errors.log");  // Log JSON para análisis
+    std::vector<ErrorRecord> error_buffer;  // Buffer en memoria para insertar al final
+    error_buffer.reserve(10000);  // Pre-reservar
+
+    uint64_t global_line_number = 1;
+    uint64_t null_bytes_cleaned = 0;
+    uint64_t invalid_utf8_found = 0;
+
+    // 4. Iniciar COPY en PostgreSQL
+    res = PQexec(conn, "COPY \"PW\" (pw) FROM STDIN WITH (FORMAT text)");
+    if (PQresultStatus(res) != PGRES_COPY_IN) {
+        std::cerr << "Error iniciando COPY: " << PQerrorMessage(conn) << std::endl;
+        PQclear(res); close(fd); PQfinish(conn); return 1;
+    }
+    PQclear(res);
+
+    std::cout << "Iniciando streaming masivo..." << std::endl;
+    auto start = std::chrono::high_resolution_clock::now();
+
+    // 5. Leer en bloques de 64 MB, limpiar y enviar
+    const size_t BUFFER_SIZE = 64 * 1024 * 1024; // 64 MB
+    std::vector<char> buffer(BUFFER_SIZE);
+    ssize_t bytes_read;
+    uint64_t total_bytes_sent = 0;
+    null_bytes_cleaned = 0; // Contador de bytes nulos limpiados
+
+    while ((bytes_read = read(fd, buffer.data(), BUFFER_SIZE)) > 0) {
+
+        // === FASE 1: DETECCIÓN Y LIMPIEZA ===
+        for (ssize_t i = 0; i < bytes_read; ++i) {
+
+            // Estrategia 1: Bytes nulos
+            if (buffer[i] == '\0') {
+                // Registrar error ANTES de modificar
+                std::string context = extract_line_context(buffer.data(), i, bytes_read);
+                ErrorRecord err;
+                err.byte_offset = total_bytes_sent + i;
+                err.line_number = global_line_number;
+                err.error_type = "NULL_BYTE";
+                err.raw_hex = bytes_to_hex(context.data(), context.size());
+                err.sanitized = "Replaced \\0 with space";
+                err.strategy = "NULL_TO_SPACE";
+                error_buffer.push_back(err);
+
+                // Aplicar limpieza
+                buffer[i] = ' ';
+                ++null_bytes_cleaned;
+            }
+
+            // Estrategia 2: Secuencias UTF-8 inválidas (detección básica)
+            // Bytes 0x80-0xBF sin byte líder, o 0xF5-0xFF (inválidos en UTF-8)
+            unsigned char c = (unsigned char)buffer[i];
+            if (c >= 0xF5 || c == 0xFE || c == 0xFF) {
+                std::string context = extract_line_context(buffer.data(), i, bytes_read);
+                ErrorRecord err;
+                err.byte_offset = total_bytes_sent + i;
+                err.line_number = global_line_number;
+                err.error_type = "INVALID_UTF8_BYTE";
+                err.raw_hex = bytes_to_hex(context.data(), context.size());
+                err.sanitized = "Replaced invalid byte with ?";
+                err.strategy = "INVALID_BYTE_TO_QUESTION";
+                error_buffer.push_back(err);
+
+                buffer[i] = '?';
+                ++invalid_utf8_found;
+            }
+
+            // Contar saltos de línea para tracking
+            if (buffer[i] == '\n') {
+                ++global_line_number;
+            }
+        }
+
+        // === FASE 2: ENVÍO DEL BUFFER LIMPIO ===
+        if (PQputCopyData(conn, buffer.data(), static_cast<int>(bytes_read)) != 1) {
+            std::cerr << "Error enviando datos: " << PQerrorMessage(conn) << std::endl;
+            break;
+        }
+
+        total_bytes_sent += bytes_read;
+
+        // Progreso mejorado
+        if (total_bytes_sent % (BUFFER_SIZE * 10) == 0) {
+            auto now = std::chrono::high_resolution_clock::now();
+            double elapsed = std::chrono::duration<double>(now - start).count();
+            double mb_per_sec = (total_bytes_sent / (1024.0 * 1024.0)) / elapsed;
+            double progress_pct = (total_bytes_sent * 100.0) / file_size;
+
+            std::cout << "Progreso: " << std::fixed << std::setprecision(1) << progress_pct
+                      << "% | Velocidad: " << std::setprecision(0) << mb_per_sec << " MB/s"
+                      << " | Nulos: " << null_bytes_cleaned
+                      << " | UTF8 inválidos: " << invalid_utf8_found
+                      << " | Errores en buffer: " << error_buffer.size()
+                      << std::endl;
+        }
+    }
+
+    close(fd);
+
+    // 6. Finalizar COPY (¡CRÍTICO: No comentar esto!)
+    std::cout << "Finalizando transacción COPY en PostgreSQL..." << std::endl;
+    if (PQputCopyEnd(conn, NULL) != 1) {
+        std::cerr << "Error finalizando COPY: " << PQerrorMessage(conn) << std::endl;
+    } else {
+        res = PQgetResult(conn);
+        if (PQresultStatus(res) != PGRES_COMMAND_OK) {
+            std::cerr << "Error en el servidor al finalizar COPY: " << PQerrorMessage(conn) << std::endl;
+        }
+        PQclear(res);
+    }
+
+	// === FASE 3: INSERTAR ERRORES EN TABLA DE QUARANTINE ===
+	std::cout << "\n=== FASE DE RECUPERACIÓN DE ERRORES ===\n";
+	std::cout << "Insertando " << error_buffer.size() << " registros problemáticos en PW_errors...\n";
+
+	for (const auto& err : error_buffer) {
+		// Escapar comillas simples para SQL
+		std::string safe_hex = err.raw_hex;
+		std::string safe_sanitized = err.sanitized;
+		std::string safe_strategy = err.strategy;
+		std::string safe_type = err.error_type;
+
+		// Reemplazar ' por '' en strings
+		auto escape_sql = [](std::string& s) {
+			size_t pos = 0;
+			while ((pos = s.find("'", pos)) != std::string::npos) {
+				s.replace(pos, 1, "''");
+				pos += 2;
+			}
+		};
+		escape_sql(safe_hex);
+		escape_sql(safe_sanitized);
+		escape_sql(safe_strategy);
+		escape_sql(safe_type);
+
+		std::string sql = "INSERT INTO \"PW_errors\" (byte_offset, line_number, error_type, raw_hex, sanitized, strategy_applied) VALUES ("
+			+ std::to_string(err.byte_offset) + ", "
+			+ std::to_string(err.line_number) + ", '"
+			+ safe_type + "', '"
+			+ safe_hex + "', '"
+			+ safe_sanitized + "', '"
+			+ safe_strategy + "')";
+
+		PGresult* res = PQexec(conn, sql.c_str());
+		if (PQresultStatus(res) != PGRES_COMMAND_OK) {
+			std::cerr << "Error insertando error en quarantine: " << PQerrorMessage(conn) << std::endl;
+		}
+		PQclear(res);
+	}
+
+    PQfinish(conn);
+
+    std::cout << "Recuperación completada.\n";
+
+    // === FASE 4: GUARDAR LOG JSON PARA ANÁLISIS ===
+    std::cout << "Generando log JSON para análisis...\n";
+    error_log << "[\n";
+    for (size_t i = 0; i < error_buffer.size(); ++i) {
+        const auto& err = error_buffer[i];
+        error_log << "  {\"byte_offset\": " << err.byte_offset
+                  << ", \"line_number\": " << err.line_number
+                  << ", \"error_type\": \"" << err.error_type << "\""
+                  << ", \"raw_hex\": \"" << err.raw_hex << "\""
+                  << ", \"sanitized\": \"" << err.sanitized << "\""
+                  << ", \"strategy\": \"" << err.strategy << "\"}";
+        if (i + 1 < error_buffer.size()) error_log << ",";
+        error_log << "\n";
+    }
+    error_log << "]\n";
+    error_log.close();
+
+    std::cout << "Log guardado en /home/adri/pw_errors.log\n";
+
+    auto end = std::chrono::high_resolution_clock::now();
+    double total_time = std::chrono::duration<double>(end - start).count();
+
+    std::cout << "===================================================\n";
+    std::cout << "Carga completada en " << total_time << " segundos.\n";
+    std::cout << "Velocidad promedio: " << (file_size / (1024.0 * 1024.0)) / total_time << " MB/s\n";
+    std::cout << "===================================================\n";
+
+    return 0;
+}
+
