@@ -1,0 +1,17 @@
+graph TD
+A["radix_tree_lookup"] -->|"llama a"| B["radix_tree_lookup_key"]
+C["radix_tree_lookup_key"] -->|retorna| A
+D["radix_tree_lookup_key"] -->|"llama a"| E["radix_tree_insert_item"]
+E["radix_tree_insert_item"] -->|inserta| A
+F["radix_tree_lookup_key"] -->|"llama a"| G["radix_tree_delete_item"]
+G["radix_tree_delete_item"] -->|elimina| A
+H["radix_tree_lookup_key"] -->|"llama a"| I["radix_tree_foreach"]
+I["radix_tree_foreach"] -->|realiza llamada a función| A
+J["radix_tree_foreach"] -->|"llama a"| K["radix_tree_lookup_key"]
+K["radix_tree_lookup_key"] -->|retorna| J
+L["radix_tree_lookup_key"] -->|"llama a"| M["radix_tree_insert_item"]
+M["radix_tree_insert_item"] -->|inserta| J
+N["radix_tree_lookup_key"] -->|"llama a"| O["radix_tree_delete_item"]
+O["radix_tree_delete_item"] -->|elimina| J
+P["radix_tree_lookup_key"] -->|"llama a"| Q["radix_tree_foreach"]
+Q["radix_tree_foreach"] -->|realiza llamada a función| J

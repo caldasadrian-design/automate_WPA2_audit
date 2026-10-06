@@ -1,0 +1,13 @@
+graph TD
+A["main"] -->|"llama a"| B["configura_programa"]
+B["configura_programa"] -->|"llama a"| C["parsear_opciones"]
+C["parsear_opciones"] -->|"llama a"| D["getopt"]
+A["main"] -->|"llama a"| E["captura_señales"]
+E["captura_señales"] -->|"llama a"| F["signal"]
+A["main"] -->|"llama a"| G["ejecuta_ataque_dos"]
+G["ejecuta_ataque_dos"] -->|"llama a"| H["generar_ataque"]
+G["ejecuta_ataque_dos"] -->|"llama a"| I["manejar_red"]
+G["ejecuta_ataque_dos"] -->|"llama a"| J["manejar_sockets"]
+A["main"] -->|"llama a"| K["liberar_recursos"]
+K["liberar_recursos"] -->|"llama a"| L["cerrar_sockets"]
+K["liberar_recursos"] -->|"llama a"| M["liberar_memoria"]

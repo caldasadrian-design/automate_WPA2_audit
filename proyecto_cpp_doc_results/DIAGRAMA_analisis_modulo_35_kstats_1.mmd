@@ -1,0 +1,7 @@
+graph LR
+A["main()"] -->|llama a| B["readIVS(file, &ivs)"]
+B["readIVS(file, &ivs)"] -->|crea una estructura para guardar los datos del archivo IVS| C[IVS]
+A["main()"] -->|realiza el análisis de las intervenciones| D[A análisis]
+A["main()"] -->|genera conclusiones sobre las posibles claves WEP| E[Conclusiones]
+D[A análisis] -->|(Aquí se implementaría la lógica del análisis)| D[A análisis]
+E[Conclusiones] -->|(Aquí se implementaría la lógica para generar las conclusiones)| E[Conclusiones]
