@@ -1,0 +1,19 @@
+graph TD
+subgraph "Initialization"
+A["open_cowpatty_hashdb(filename, mode)"]  -->  B{"File open successful?"}
+end
+subgraph "Processing"
+B  --> |" Yes "| C["Initialize cowpatty_file structure"]
+B  --> |" No "| D["Register error"]
+end
+subgraph "Reading Records"
+C  -->  E["read_next_cowpatty_record(cf)"]
+E  -->  F{"Record available?"}
+F  --> |" Yes "| G["Process record"]
+F  --> |" No "| H["End of file reached"]
+end
+subgraph "Cleanup"
+C  -->  I["close_free_cowpatty_hashdb(cf)"]
+H  -->  I
+G  -->  I
+end

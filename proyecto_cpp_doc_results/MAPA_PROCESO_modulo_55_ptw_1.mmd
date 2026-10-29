@@ -1,0 +1,23 @@
+graph TD
+subgraph "Initialization"
+A["PTW_newattackstate"]  -->  B["Initialize attack state"]
+end
+subgraph "Session Management"
+B  -->  C["Add session"]
+C  -->  D["Capture IVs and keystreams"]
+D  -->  E{"Session added?"}
+E  --> |" Yes "| F["Continue"]
+E  --> |" No "| G["Register error"]
+end
+subgraph "Key Computation"
+F  -->  H["PTW_computeKey"]
+H  -->  I["Compute key based on collected data"]
+I  -->  J{"Key computed?"}
+J  --> |" Yes "| K["Return key"]
+J  --> |" No "| L["Register error"]
+end
+subgraph "Cleanup"
+K  -->  M["PTW_freeattackstate"]
+M  -->  N["Free attack state memory"]
+L  -->  N
+end

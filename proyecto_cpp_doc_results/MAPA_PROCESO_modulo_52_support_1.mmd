@@ -1,0 +1,27 @@
+graph TD
+subgraph "Initialization"
+A["Include necessary headers"]  -->  B["Define constants (NB_PRB, NB_PWR)"]
+end
+subgraph "Data Structures"
+B  -->  C["Define WPS_info structure"]
+C  -->  D["Define n_channel_info structure"]
+C  -->  E["Define ac_channel_info structure"]
+D  -->  F["Define AP_info structure"]
+E  -->  F
+F  -->  G["Define ST_info structure"]
+end
+subgraph "Channel Width Enum"
+F  -->  H["Define Channel Width enum"]
+end
+subgraph "Usage"
+H  -->  I["Initialize data structures"]
+I  -->  J["Process network data"]
+J  -->  K{"Update AP_info and ST_info"}
+K  -->  L["Store WPA handshake data"]
+L  -->  M["Decrypt IV data"]
+M  -->  N["Capture beacons and packets"]
+N  -->  O["Analyze signal power statistics"]
+O  -->  P["Update GPS coordinates"]
+P  -->  Q["Detect decloak status"]
+Q  -->  R["Store data packets"]
+end

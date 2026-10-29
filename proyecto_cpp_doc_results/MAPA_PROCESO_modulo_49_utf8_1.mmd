@@ -1,0 +1,13 @@
+graph TD
+subgraph "Inicio"
+A["Recibir SSID"]  -->  B{"¿Es una cadena válida?"}
+end
+subgraph "Verificación"
+B  --> |" Sí "| C["Llamar a verifyssid()"]
+C  -->  D["Retornar resultado de verifyssid()"]
+B  --> |" No "| E["Registrar error"]
+end
+subgraph "Fin"
+D  -->  F["Fin del proceso"]
+E  -->  F
+end

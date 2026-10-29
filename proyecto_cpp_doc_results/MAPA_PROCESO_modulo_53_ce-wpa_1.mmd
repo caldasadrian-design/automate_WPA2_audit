@@ -1,0 +1,20 @@
+graph TD
+A["Include aircrack-ng/crypto-engine.h"]  -->  B["Initialize cryptographic engine thread"]
+B  -->  C["Calculate SIMD width"]
+C  -->  D["Calculate PMK"]
+D  -->  E["Calculate PTK"]
+E  -->  F["Calculate MIC"]
+F  -->  G["Attempt WPA key cracking"]
+G  -->  H["Attempt WPA PMKID cracking"]
+H  -->  I["Calculate one PMK"]
+subgraph "Initialization and Destruction"
+A  -->  J["Initialize cryptographic engine thread"]
+J  -->  K["Destroy cryptographic engine thread"]
+end
+subgraph "Byte Swapping"
+L["Include johnswap.h"]  -->  M["Conditional compilation"]
+M  -->  N["Perform 32-bit byte swapping"]
+N  -->  O["Perform 64-bit byte swapping"]
+O  -->  P["Rotate left 32-bit integer"]
+P  -->  Q["Rotate left 64-bit integer"]
+end

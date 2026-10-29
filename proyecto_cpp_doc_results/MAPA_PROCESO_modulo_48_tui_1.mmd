@@ -1,0 +1,68 @@
+graph TD
+subgraph "Initialization"
+A["Initialization of TUI module"]
+end
+subgraph "Text Styling"
+B["textcolor(int attr, int fg, int bg)"]
+C["textcolor_fg(int fg)"]
+D["textcolor_bg(int bg)"]
+E["textcolor_normal(void)"]
+F["textstyle(int attr)"]
+end
+subgraph "Cursor Movement"
+G["moveto(int x, int y)"]
+H["move(int which, int n)"]
+end
+subgraph "Display Manipulation"
+I["erase_display(int n)"]
+J["erase_line(int n)"]
+end
+subgraph "Cursor Control"
+K["hide_cursor(void)"]
+L["show_cursor(void)"]
+end
+subgraph "Terminal Reset"
+M["reset_term(void)"]
+end
+subgraph "Input Handling"
+N["mygetch(void)"]
+end
+subgraph "UTF-8 Support"
+O["console_utf8_enable(void)"]
+end
+subgraph "Utility Functions"
+P["console_puts(const char * msg)"]
+end
+subgraph "Completion"
+Q["Completion of TUI module functionality"]
+end
+A  -->  B
+A  -->  C
+A  -->  D
+A  -->  E
+A  -->  F
+A  -->  G
+A  -->  H
+A  -->  I
+A  -->  J
+A  -->  K
+A  -->  L
+A  -->  M
+A  -->  N
+A  -->  O
+A  -->  P
+B  -->  Q
+C  -->  Q
+D  -->  Q
+E  -->  Q
+F  -->  Q
+G  -->  Q
+H  -->  Q
+I  -->  Q
+J  -->  Q
+K  -->  Q
+L  -->  Q
+M  -->  Q
+N  -->  Q
+O  -->  Q
+P  -->  Q

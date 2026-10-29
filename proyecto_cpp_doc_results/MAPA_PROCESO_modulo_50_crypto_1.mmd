@@ -1,0 +1,23 @@
+graph TD
+subgraph "MD5 Cryptographic Hash"
+A["Initialize MD5 Digest"]  -->  B["Update MD5 Digest with Data"]
+B  -->  C["Finalize MD5 Digest"]
+C  -->  D["Return MD5 Hash"]
+subgraph "HMAC MD5"
+E["Initialize HMAC MD5 Digest"]  -->  F["Update HMAC MD5 Digest with Data"]
+F  -->  G["Finalize HMAC MD5 Digest"]
+G  -->  H["Return HMAC MD5 Hash"]
+end
+end
+subgraph "SHA-1 Hash Function"
+I["Initialize SHA-1 Context"]  -->  J["Update SHA-1 Context with Data"]
+J  -->  K["Finalize SHA-1 Context"]
+K  -->  L["Return SHA-1 Hash"]
+end
+subgraph "ARCFOUR Stream Cipher"
+M["Set ARCFOUR Key"]  -->  N["Encrypt/Decrypt Data"]
+N  -->  O["Return Encrypted/Decrypted Data"]
+end
+subgraph "Summary"
+P["Note on MD5 and ARCFOUR"]  -->  Q["Recommend Stronger Cryptographic Functions"]
+end

@@ -1,0 +1,32 @@
+graph TD
+subgraph "Initialization"
+A["uniqueiv_init()"]  -->  B["Initialize unique IV data structure"]
+end
+subgraph "Data Management"
+C["data_init()"]  -->  D["Initialize data structure for storing data"]
+end
+subgraph "IV Operations"
+subgraph "Mark IV"
+E["uniqueiv_mark(uiv_root, IV)"]  -->  F{"IV present?"}
+F  --> |" Yes "| G["IV already marked"]
+F  --> |" No "| H["Mark IV as present"]
+end
+subgraph "Check IV"
+I["uniqueiv_check(uiv_root, IV)"]  -->  J{"IV present?"}
+J  --> |" Yes "| K["IV is present"]
+J  --> |" No "| L["IV is not present"]
+end
+subgraph "Wipe IV"
+M["uniqueiv_wipe(uiv_root)"]  -->  N["Free memory allocated for unique IV data structure"]
+end
+end
+subgraph "Data Operations"
+subgraph "Check Data"
+O["data_check(data_root, IV, data)"]  -->  P{"Data present?"}
+P  --> |" Yes "| Q["Data is present"]
+P  --> |" No "| R["Data is not present"]
+end
+subgraph "Wipe Data"
+S["data_wipe(data)"]  -->  T["Free memory allocated for data structure"]
+end
+end
