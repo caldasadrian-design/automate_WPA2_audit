@@ -1,0 +1,36 @@
+graph TD
+subgraph "Inicio"
+A["Recibir parametros"]  -->  B{"¿Son validos?"}
+end
+subgraph "Procesamiento"
+B  --> |" Si "| C["Llamar a funcion()"]
+B  --> |" No "| D["Registrar error"]
+end
+subgraph "CPU Information Retrieval"
+C  -->  E["cpuid_vendor()"]
+C  -->  F["cpuid_modelinfo()"]
+C  -->  G["cpuid_featureflags()"]
+C  -->  H["cpuid_x86_logical_cores()"]
+C  -->  I["cpuid_x86_physical_cores()"]
+C  -->  J["cpuid_simdsize()"]
+C  -->  K["cpuid_getinfo()"]
+end
+subgraph "PPC Architecture"
+K  -->  L{"__ppc__ o __PPC__?"}
+L  --> |" Yes "| M["trampoline_ppc.c"]
+M  -->  N["simd_get_supported_features()"]
+end
+subgraph "ARM Architecture"
+K  -->  O{"__arm__ o __aarch64__?"}
+O  --> |" Yes "| P["trampoline_arm.c"]
+P  -->  Q["simd_get_supported_features()"]
+end
+subgraph "SIMD Support Initialization/Destruction"
+K  -->  R["simd_init()"]
+K  -->  S["simd_destroy()"]
+end
+subgraph "Error Handling"
+B  -->  T["Registrar error"]
+L  --> |" No "| T
+O  --> |" No "| T
+end

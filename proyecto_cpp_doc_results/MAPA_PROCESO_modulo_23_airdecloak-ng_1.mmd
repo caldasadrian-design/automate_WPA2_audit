@@ -1,0 +1,16 @@
+graph TD
+A["main()"]  -->  B["Initialize variables"]
+B  -->  C["Parse command-line options"]
+C  -->  D{"Check for input file"}
+D  --> |" No "| E["Display usage information"]
+E  -->  F["Exit"]
+D  --> |" Yes "| G["Open PCAP file"]
+G  -->  H{"Check if files need creation"}
+H  --> |" Yes "| I["Create output filenames"]
+H  --> |" No "| J["Proceed to packet processing"]
+J  -->  K["Read packets from file"]
+K  -->  L["Close PCAP file"]
+L  -->  M["Check for cloaked frames"]
+M  -->  N["Write packets to files"]
+N  -->  O["Print statistics"]
+O  -->  P["Exit"]

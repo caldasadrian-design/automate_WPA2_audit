@@ -1,0 +1,21 @@
+graph TD
+A["main"]  -->  B["free_data"]
+A  -->  C["pwn"]
+C  -->  D["wi_open"]
+D  -->  E["wi_read"]
+E  -->  F["wi_close"]
+F  -->  G["process_packet"]
+G  -->  H{"Tipo de paquete?"}
+H  --> |" Beacon "| I["process_beacon"]
+H  --> |" Data "| J["process_data"]
+J  -->  K{"EAPOL?"}
+K  --> |" No "| L["Grabar SSID oculto"]
+K  --> |" Sí "| M["process_eapol"]
+M  -->  N["packet_copy"]
+I  -->  O["find_add_net"]
+J  -->  P["find_add_client"]
+N  -->  Q["check_network"]
+O  -->  R["find_add_net"]
+P  -->  S["find_add_client"]
+Q  -->  T["Grabar handshake"]
+T  -->  U["Comprobar handshake completo"]

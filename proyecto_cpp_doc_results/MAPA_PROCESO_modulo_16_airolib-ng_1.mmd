@@ -1,0 +1,25 @@
+graph TD
+subgraph "Init"
+A["Start"]  -->  B{"Check params"}
+end
+subgraph "Database Operations"
+E["check_for_db"]  -->  F{"DB exists?"}
+I["initDataBase"]  -->  J{"Create tables"}
+K["verify integrity"]  -->  L["Data verified"]
+end
+subgraph "Command-Line Options"
+M["batch_process"]  -->  N["Import/Export data"]
+O["vacuum"]  -->  P["Optimize database"]
+Q["export_cowpatty"]  -->  R["Export Cowpatty format"]
+S["import_cowpatty"]  -->  T["Import from Cowpatty file"]
+U["import_ascii"]  -->  V["Import ASCII file"]
+W["sql_stdout"]  -->  X{"Execute SQL query"}
+Y["show_stats"]  -->  Z["Display stats"]
+AA["verify"]  -->  AB["Verify data integrity"]
+end
+subgraph "Error Handling"
+AC{"Error?"} -- Yes  -->  AD["Print error message"]
+end
+subgraph "Signal Handling"
+AF["Set signal handlers"]  -->  AG{"SIGINT, SIGQUIT, SIGTERM"}
+end

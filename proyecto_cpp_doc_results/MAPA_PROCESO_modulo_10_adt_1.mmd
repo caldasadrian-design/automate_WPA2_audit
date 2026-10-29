@@ -1,0 +1,81 @@
+graph TD
+subgraph "Node Structure"
+A["c_avl_node_t"]
+A1["key"]
+A2["value"]
+A3["height"]
+A4["left"]
+A5["right"]
+A6["parent"]
+A  --> |Contains| A1 & A2 & A3 & A4 & A5 & A6
+end
+subgraph "Tree Structure"
+B["c_avl_tree_t"]
+B1["root"]
+B2["compare"]
+B3["size"]
+B  --> |Contains| B1 & B2 & B3
+end
+C["free_node"]
+D["rebalance"]
+E["search"]
+F["_remove"]
+G["c_avl_node_next"]
+H["c_avl_node_prev"]
+I["verify_tree"]
+J["c_avl_create"]
+K["c_avl_destroy"]
+L["c_avl_insert"]
+M["c_avl_remove"]
+N["c_avl_get"]
+O["c_avl_pick"]
+P["c_avl_get_iterator"]
+Q["c_avl_iterator_next"]
+R["c_avl_iterator_prev"]
+S["c_avl_iterator_destroy"]
+T["c_avl_size"]
+A  -->  C
+B  -->  D & E & F & G & H & I
+J  -->  K
+L  -->  M & N & O
+P  -->  Q & R
+S  -->  T
+subgraph "Public Functions"
+U["c_avl_create"]
+V["c_avl_destroy"]
+W["c_avl_insert"]
+X["c_avl_remove"]
+Y["c_avl_get"]
+Z["c_avl_pick"]
+AA["c_avl_get_iterator"]
+AB["c_avl_iterator_next"]
+AC["c_avl_iterator_prev"]
+AD["c_avl_iterator_destroy"]
+AE["c_avl_size"]
+U  -->  V
+W  -->  X & Y & Z
+P  -->  Q & R
+S  -->  T
+end
+subgraph "Helper Functions"
+AF["free_node"]
+AG["rebalance"]
+AH["search"]
+AI["_remove"]
+AJ["c_avl_node_next"]
+AK["c_avl_node_prev"]
+AL["verify_tree"]
+A  -->  AF & AG & AH & AI & AJ & AK & AL
+end
+subgraph "Tree Operations"
+AM["Insert"]
+AN["Delete"]
+AO["Search"]
+AP["Get"]
+AQ["Pick"]
+AR["Iterator"]
+L  -->  AM & AN
+Y  -->  AO
+Z  -->  AQ
+P  -->  AR
+end

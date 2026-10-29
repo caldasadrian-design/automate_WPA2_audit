@@ -1,0 +1,39 @@
+graph TD
+subgraph "Inicio"
+A["Parsear argumentos de línea de comandos"]  -->  B["Inicializar configuraciones"]
+B  -->  C["Configurar manejadores de señales"]
+C  -->  D["Inicializar configuraciones de red y canales"]
+D  -->  E["Llamar a la función principal (pwn())"]
+end
+subgraph "Procesamiento"
+E  -->  F["Iniciar bucle principal"]
+F  -->  G["Comprobar si se recibió una señal"]
+G  --> |" SIGINT o SIGKILL "| H["Terminar graciosamente"]
+G  --> |" SIGUSR1 "| I["Imprimir estado actual"]
+G  --> |" SIGCHLD "| J["Manejar terminación de proceso hijo"]
+F  -->  K["Llamar a funciones de estado"]
+F  -->  L["Llamar a funciones de ataque"]
+end
+subgraph "Estado y Control"
+B  -->  M["Inicializar configuraciones"]
+D  -->  N["Configurar configuraciones de red y canales"]
+F  -->  O["Actualizar estado"]
+F  -->  P["Realizar ataques"]
+I  -->  Q["Imprimir estado actual"]
+end
+subgraph "Funciones Auxiliares"
+A  -->  R["Inicializar configuraciones"]
+B  -->  S["Configurar manejadores de señales"]
+C  -->  T["Inicializar configuraciones de red y canales"]
+E  -->  U["Iniciar bucle principal"]
+F  -->  V["Llamar a funciones de estado"]
+F  -->  W["Llamar a funciones de ataque"]
+I  -->  X["Imprimir estado actual"]
+G  -->  Y["Manejar terminación de proceso hijo"]
+end
+subgraph "Manejo de Errores"
+A  -->  Z["Comprobar validez de argumentos"]
+Z  --> |" No "| AA["Registrar error"]
+F  -->  AB["Comprobar estado de red"]
+AB  --> |" Error "| AC["Registrar error"]
+end

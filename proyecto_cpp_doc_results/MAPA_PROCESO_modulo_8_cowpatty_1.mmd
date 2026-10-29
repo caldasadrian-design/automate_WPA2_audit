@@ -1,0 +1,17 @@
+graph TD
+subgraph "Opening Hash Database"
+A["open_cowpatty_hashdb(filename, mode)"]  -->  B["Initialize cowpatty_file structure"]
+B  -->  C["Open hash database file"]
+C  -->  D["Return cowpatty_file structure"]
+end
+subgraph "Reading Records"
+E["read_next_cowpatty_record(cowpatty_file)"]  -->  F["Check if file is open"]
+F  --> |" Yes "| G["Read next record"]
+G  -->  H["Return record"]
+F  --> |" No "| I["Return NULL"]
+end
+subgraph "Closing and Freeing Resources"
+J["close_free_cowpatty_hashdb(cowpatty_file)"]  -->  K["Close hash database file"]
+K  -->  L["Free cowpatty_file structure"]
+L  -->  M["Return"]
+end

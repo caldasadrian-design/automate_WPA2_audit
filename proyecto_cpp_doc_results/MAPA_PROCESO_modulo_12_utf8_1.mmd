@@ -1,0 +1,5 @@
+graph TD
+subgraph "utf8 Module"
+A["verifyssid(const unsigned char * s)"]  -->  B{"Check length <= 32"}
+B  -->  C{"Is valid UTF-8?"}
+end

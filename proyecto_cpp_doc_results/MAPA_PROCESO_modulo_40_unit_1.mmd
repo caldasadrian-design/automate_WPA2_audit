@@ -1,0 +1,25 @@
+graph TD
+subgraph "Inicialización"
+A["ac_crypto_engine_set_essid"]  -->  B["ac_crypto_engine_thread_init"]
+end
+subgraph "Prueba de Cálculo de PMK"
+C["test_calc_one_pmk"]  -->  D["Calcular PMK"]
+D  -->  E["Verificar PMK"]
+C["test_calc_pmk"]  -->  F["Inicializar engine"]
+F  -->  G["Configurar ESSID"]
+G  -->  H["Inicializar hilos"]
+H  -->  I["Calcular PMK con engine"]
+I  -->  J["Verificar PMK"]
+end
+subgraph "Manejo de Hilos"
+K["ac_crypto_engine_thread_init"]  -->  L["ac_crypto_engine_thread_destroy"]
+end
+subgraph "Optimización SIMD"
+M["group_setup"]  -->  N["Determinar características SIMD"]
+N  -->  O["Pasar información a pruebas"]
+end
+subgraph "Gestión de Memoria"
+P["assert_memory_equal"]  -->  Q["Verificar igualdad de memoria"]
+end
+subgraph "Ejecución de Pruebas"
+R["Compilar y ejecutar"]  -->  S["Validar funcionamiento"]

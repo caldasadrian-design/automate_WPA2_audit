@@ -1,0 +1,30 @@
+graph TD
+A["Module Initialization"]  -->  B["Check PCRE availability"]
+B  --> |" PCRE Available "| C["Load PCRE library"]
+B  --> |" PCRE2 Available "| D["Load PCRE2 library"]
+C  -->  E["Initialize PCRE library"]
+D  -->  E["Initialize PCRE2 library"]
+E  -->  F["Ready to use PCRE/PCRE2"]
+subgraph "COMPAT_PCRE_COMPILE"
+F  -->  G["Receive pattern, pcreerror, pcreerroffset"]
+G  -->  H{"Is PCRE2 available?"}
+H  --> |" Yes "| I["Use PCRE2_compile"]
+H  --> |" No "| J["Use PCRE_compile"]
+I  -->  K["Return compiled regex"]
+J  -->  K["Return compiled regex"]
+K  -->  L["COMPAT_PCRE_COMPILE completed"]
+end
+subgraph "COMPAT_PCRE_MATCH"
+L  -->  M["Receive regex, essid, length, match_data"]
+M  -->  N{"Is PCRE2 available?"}
+N  --> |" Yes "| O["Use PCRE2_exec"]
+N  --> |" No "| P["Use PCRE_exec"]
+O  -->  Q["Return match result"]
+P  -->  Q["Return match result"]
+Q  -->  R["COMPAT_PCRE_MATCH completed"]
+end
+subgraph "COMPAT_PCRE_PRINT_ERROR"
+R  -->  S["Receive pcreerroffset, pcreerr"]
+S  -->  T["Print error message"]
+T  -->  U["COMPAT_PCRE_PRINT_ERROR completed"]
+end

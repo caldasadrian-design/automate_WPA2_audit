@@ -1,0 +1,18 @@
+graph TD
+A["Inicio"]  -->  B["Parsear argumentos de línea de comandos"]
+B  -->  C["Validar argumentos"]
+C  --> |" Argumentos válidos "| D["Inicializar variables"]
+C  --> |" Argumentos inválidos "| E["Mostrar error y salir"]
+D  -->  F["Inicializar PRNG si especificado"]
+F  -->  G["Generar IVs"]
+G  -->  H["Verificar unicidad de IVs"]
+H  --> |" IV único "| I["Escribir IV a archivo"]
+H  --> |" IV no único "| J["Generar nuevo IV"]
+I  -->  K["Incrementar contador de IVs"]
+K  -->  L["Imprimir progreso"]
+J  -->  L
+G  -->  M["Calcular tamaño estimado del archivo"]
+M  -->  N["Imprimir tamaño estimado"]
+G  --> |" Terminar generación "| O["Finalizar archivo"]
+O  -->  P["Imprimir conclusión"]
+A  --> |" Terminar "| Q["Fin"]

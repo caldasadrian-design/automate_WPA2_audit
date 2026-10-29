@@ -1,0 +1,12 @@
+graph TD
+subgraph "ac_crypto_engine_loader.c"
+A1["ac_crypto_engine_loader_string_to_flag"]  -->  A2["Convert string to flag"]
+B1["ac_crypto_engine_loader_flags_to_string"]  -->  B2["Convert flags to string"]
+C1["ac_crypto_engine_loader_get_available"]  -->  C2["Get available features"]
+D1["ac_crypto_engine_loader_best_library_for"]  -->  D2["Select best library"]
+E1["ac_crypto_engine_loader_load"]  -->  E2["Load cryptographic engine"]
+F1["ac_crypto_engine_loader_unload"]  -->  F2["Unload cryptographic engine"]
+end
+subgraph "strlcpy.c"
+G1["strlcpy"]  -->  G2["Copy string safely"]
+end

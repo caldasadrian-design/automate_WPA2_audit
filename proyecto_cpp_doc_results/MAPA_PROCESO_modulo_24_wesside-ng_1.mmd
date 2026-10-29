@@ -1,0 +1,24 @@
+graph TD
+subgraph "Initialization and Configuration"
+A["init_defaults"]
+end
+subgraph "Command-Line Argument Parsing"
+B["main"]
+end
+subgraph "Main Loop"
+C["own"]
+C  -->  D["Capture packets"]
+C  -->  E["Check relay and ARP timeouts"]
+C  -->  F["Update status bar"]
+C  -->  G["Trigger key cracking"]
+end
+subgraph "Packet Analysis and Handling"
+H["anal"]
+end
+subgraph "Key Cracking"
+I["try_crack"]
+end
+subgraph "Signal Handling"
+J["cleanup"]
+K["sigchild"]
+end

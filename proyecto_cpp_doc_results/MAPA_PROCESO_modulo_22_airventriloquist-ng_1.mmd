@@ -1,0 +1,44 @@
+graph TD
+subgraph "Initialization"
+A["Initialize structures"]  -->  B["Define constants"]
+end
+subgraph "Packet Analysis"
+C["Receive packet"]  -->  D["Parse Ethernet frame"]
+D  -->  E{"Is it an IP packet?"}
+E  --> |" Yes "| F["Parse IP header"]
+F  -->  G{"Is it a TCP packet?"}
+G  --> |" Yes "| H["Parse TCP header"]
+G  --> |" No "| I["Is it an ICMP packet?"]
+I  --> |" Yes "| J["Parse ICMP header"]
+I  --> |" No "| K["Is it a DNS packet?"]
+K  --> |" Yes "| L["Parse DNS header"]
+K  --> |" No "| M["Is it an 802.1X packet?"]
+M  --> |" Yes "| N["Parse 802.1X header"]
+M  --> |" No "| O["Is it a RADIUS packet?"]
+O  --> |" Yes "| P["Parse RADIUS header"]
+O  --> |" No "| Q["Unhandled packet type"]
+end
+subgraph "Packet Construction"
+R["Construct Ethernet frame"]  -->  S["Construct IP header"]
+S  -->  T["Construct TCP header"]
+T  -->  U["Construct ICMP header"]
+U  -->  V["Construct DNS header"]
+V  -->  W["Construct 802.1X header"]
+W  -->  X["Construct RADIUS header"]
+end
+subgraph "Utility Functions"
+Y["Mac address printing"]  -->  Z["Color codes"]
+Z  -->  AA["DNS response packets"]
+AA  -->  AB["HTTP 302 redirect packet"]
+end
+subgraph "Decision Points"
+C  -->  AC{"Is it an Ethernet frame?"}
+AC  --> |" Yes "| AD["Continue"]
+AC  --> |" No "| AE["Unhandled packet type"]
+end
+subgraph "Error Handling"
+AB  -->  AF{"Is an error?"}
+AF  --> |" Yes "| AG["Log error"]
+AG  -->  AH["Exit"]
+AF  --> |" No "| AI["Continue"]
+end

@@ -1,0 +1,13 @@
+graph TD
+A["config.h.in and configure.ac"]  -->  B["autoheader"]
+B  -->  C["configure"]
+C  -->  D["config.h"]
+subgraph "Dependencies"
+D  -->  E["configure.ac"]
+D  -->  F["Makefile.am"]
+D  -->  G["Various source files"]
+end
+subgraph "Configuration"
+G  -->  H["Conditional compilation"]
+G  -->  I["Configuration checks"]
+end

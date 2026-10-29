@@ -1,0 +1,27 @@
+graph TD
+subgraph "Initialization"
+A["Initialize options"]  -->  B["Initialize WEP_data"]
+A  -->  C["Initialize WPA_data"]
+end
+subgraph "Input Handling"
+D["Process user input"]  -->  E{"Is it valid input?"}
+end
+subgraph "Processing"
+E  --> |" Yes "| F["Start cracking"]
+E  --> |" No "| G["Register error and exit"]
+end
+subgraph "Cracking"
+F  -->  H["Select attack mode"]
+H  -->  I["Prepare data"]
+I  -->  J["Start brute force"]
+I  -->  K["Start dictionary attack"]
+I  -->  L["Start PTW attack"]
+J  -->  M{"Check progress"}
+K  -->  M
+L  -->  M
+M  --> |" Continue "| I
+M  --> |" Complete "| N["Save results"]
+end
+subgraph "Cleanup"
+N  -->  O["Clean up resources"]
+end

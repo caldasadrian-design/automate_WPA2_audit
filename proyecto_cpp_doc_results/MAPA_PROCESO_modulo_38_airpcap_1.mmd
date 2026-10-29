@@ -1,0 +1,28 @@
+graph TD
+subgraph "Initialization"
+A["cygwin_init(char *param)"]  -->  B{"AirpcapOpen()"}
+B  -->  C["AirpcapSetFcsPresence()"]
+C  -->  D["AirpcapSetLinkType()"]
+D  -->  E["AirpcapSetFcsValidation()"]
+E  -->  F["AirpcapSetMinToCopy()"]
+F  -->  G["AirpcapSetDeviceChannel()"]
+G  -->  H["Set capture channel"]
+H  -->  I["Set injection channel"]
+end
+subgraph "Packet Capture"
+I  -->  J["cygwin_sniff(void *buf, int len, struct rx_info *ri)"]
+J  -->  K{"AirpcapRead()"}
+K  --> |" Success "| L["Store packet in buffer"]
+K  --> |" Failure "| M["fprintf(stderr, error)"]
+end
+subgraph "Packet Injection"
+I  -->  N["cygwin_inject(void *buf, int len, struct tx_info *ti)"]
+N  -->  O["AirpcapWrite()"]
+O  --> |" Success "| P["Packet injected"]
+O  --> |" Failure "| Q["fprintf(stderr, error)"]
+end
+subgraph "Cleanup"
+I  -->  R["cygwin_close(void)"]
+R  -->  S["AirpcapClose()"]
+S  -->  T["Free resources"]
+end

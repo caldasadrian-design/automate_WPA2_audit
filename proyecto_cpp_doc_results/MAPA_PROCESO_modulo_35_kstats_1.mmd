@@ -1,0 +1,23 @@
+graph TD
+subgraph "Initialization"
+A["Parse command-line arguments"]  -->  B["Verify IVS file"]
+B  -->  C["Read IVS data"]
+end
+subgraph "Calculation"
+C  -->  D["Initialize votes array"]
+D  -->  E["Loop through IVs"]
+E  -->  F["Call calc_votes(ivbuf, nb_ivs, key, B, votes)"]
+F  -->  G["Update votes based on conditions"]
+G  -->  H["Loop through keybytes"]
+H  -->  I["Output votes for each keybyte"]
+end
+subgraph "Dependencies"
+I  -->  J["Use network.h for verifyssid()"]
+I  -->  K["Use aircrack-ng/defs.h for constants"]
+I  -->  L["Use aircrack-ng/aircrack-ng.h for Aircrack-ng functions"]
+I  -->  M["Use aircrack-ng/support/common.h for common utilities"]
+end
+subgraph "Completion"
+M  -->  N["Return to main.cpp"]
+N  -->  O["Used by analysis.cpp for further analysis"]
+end

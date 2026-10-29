@@ -1,0 +1,16 @@
+graph TD
+subgraph "tui Module"
+A["textcolor(int attr, int fg, int bg)"]  -->  B{"textcolor_fg(int fg)"}
+A  -->  C{"textcolor_bg(int bg)"}
+A  -->  D{"textstyle(int attr)"}
+A  -->  E["reset_term(void)"]
+A  -->  F["moveto(int x, int y)"]
+A  -->  G["move(int which, int n)"]
+A  -->  H["erase_display(int n)"]
+A  -->  I["erase_line(int n)"]
+A  -->  J["textcolor_normal(void)"]
+A  -->  K["hide_cursor(void)"]
+A  -->  L["show_cursor(void)"]
+A  -->  M["mygetch(void)"]
+A  -->  N["console_utf8_enable(void)"]
+end

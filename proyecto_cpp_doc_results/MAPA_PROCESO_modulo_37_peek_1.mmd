@@ -1,0 +1,21 @@
+graph TD
+subgraph "Initialization"
+A["main.cpp init()"]  -->  B["CYGWIN_DLL_INIT(char *param)"]
+end
+subgraph "Sniffing"
+subgraph "Start Sniffing"
+C["main.cpp start_sniffing()"]  -->  D["CYGWIN_DLL_SNIFF(void *buf, int len, struct rx_info* ri)"]
+end
+subgraph "Stop Sniffing"
+E["main.cpp stop_sniffing()"]  -->  F["CYGWIN_DLL_CLOSE(void)"]
+end
+end
+subgraph "Packet Injection"
+G["main.cpp send_packet()"]  -->  H["CYGWIN_DLL_INJECT(void* buf, int len, struct tx_info* ti)"]
+end
+subgraph "Channel Change"
+I["main.cpp change_channel()"]  -->  J["CYGWIN_DLL_SET_CHAN(int chan)"]
+end
+subgraph "Dependencies"
+K["peek.dll"]  -->  L["network.h"]  -->  M["verifyssid()"]
+end

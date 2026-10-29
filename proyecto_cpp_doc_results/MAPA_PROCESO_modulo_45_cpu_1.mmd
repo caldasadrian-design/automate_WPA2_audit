@@ -1,0 +1,13 @@
+graph TD
+subgraph "Initialization"
+A["ac_cpuset_new()"]  -->  B["ac_cpuset_init()"]
+end
+subgraph "Information Retrieval"
+C["cpuid_getinfo()"]  -->  D["Fill cpuinfo structure"]
+end
+subgraph "Thread Affinity"
+E["ac_cpuset_distribute()"]  -->  F["ac_cpuset_bind_thread_at()"]
+end
+subgraph "Cleanup"
+G["ac_cpuset_destroy()"]  -->  H["ac_cpuset_free()"]
+end

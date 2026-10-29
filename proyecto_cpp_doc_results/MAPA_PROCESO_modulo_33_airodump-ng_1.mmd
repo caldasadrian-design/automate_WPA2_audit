@@ -1,0 +1,29 @@
+graph TD
+A["Init Program"]  -->  B["Open Network Interface"]
+B  -->  C{"Is Interface Available?"}
+C  --> |" No "| D["Retry Reconnecting"]
+C  --> |" Yes "| E["Set Configuration Options"]
+E  -->  F["Initialize Data Structures"]
+F  -->  G["Start Capture Loop"]
+G  -->  H["Listen for Data"]
+H  -->  I{"Data Available?"}
+I  --> |" No "| G
+I  --> |" Yes "| J["Read Packet with wi_read"]
+J  -->  K["Calculate Packet Delay"]
+K  -->  L{"Delay Needed?"}
+L  --> |" Yes "| M["usleep Delay"]
+L  --> |" No "| N["Process Packet"]
+N  -->  O["dump_add_packet Function"]
+O  -->  P["Store Packet Data"]
+P  -->  Q["Update Display"]
+Q  -->  R["Write Packet Data"]
+R  -->  S{"Output Formats Supported?"}
+S  --> |" Yes "| T["Write to File"]
+S  --> |" No "| G
+G  -->  U{"User Input Received?"}
+U  --> |" Yes "| V["Handle User Input"]
+V  -->  G
+U  --> |" No "| W["Check for Resource Usage"]
+W  -->  X["Free Resources"]
+X  -->  Y["Exit Program"]
+Y  -->  Z["Clean Up"]

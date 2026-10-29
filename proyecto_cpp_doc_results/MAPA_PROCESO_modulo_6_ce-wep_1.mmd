@@ -1,0 +1,22 @@
+graph TD
+subgraph "Initialization"
+A["uniqueiv_init(void)"]  -->  B["Initialize root structure for IV uniqueness detection"]
+end
+subgraph "Marking IV"
+C["uniqueiv_mark(unsigned char ** uiv_root, unsigned char IV["3"])"]  -->  D["Mark a new IV in the uniqueness structure"]
+end
+subgraph "Checking IV"
+E["uniqueiv_check(unsigned char ** uiv_root, unsigned char IV["3"])"]  -->  F["Check if a given IV has been seen before"]
+end
+subgraph "Wiping IV"
+G["uniqueiv_wipe(unsigned char ** uiv_root)"]  -->  H["Unallocate the IV uniqueness structure"]
+end
+subgraph "Data Initialization"
+I["data_init(void)"]  -->  J["Initialize a data structure for storing IV and data pairs"]
+end
+subgraph "Checking Data"
+K["data_check(unsigned char * data_root, unsigned char IV["3"], unsigned char data["2"])"]  -->  L["Check if the data associated with a given IV matches a previously seen data pattern"]
+end
+subgraph "Wiping Data"
+M["data_wipe(unsigned char * data)"]  -->  N["Unallocate the data structure"]
+end

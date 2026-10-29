@@ -1,0 +1,22 @@
+graph TD
+subgraph "Inicio"
+A["main(int argc, char * argv[""])"]  -->  B["init()"]
+end
+subgraph "Inicialización"
+B  -->  C["drop_privs()"]
+C  -->  D["network.h: verifyssid()"]
+D  -->  E["easside.h: Handle EAP authentication"]
+E  -->  F["aircrack-ng/version.h: Get version information"]
+end
+subgraph "Bucle Principal"
+F  -->  G["handle(int s, unsigned char * data, int len, struct sockaddr_in * s_in)"]
+G  -->  H["is_dup(unsigned short id)"]
+H  -->  I{"¿Es duplicado?"}
+I  --> |" Sí "| J["Deshacerse de la identidad de la entidad"]
+I  --> |" No "| K["Procesar paquete"]
+K  -->  L["handle_dude(int dude, int udp)"]
+end
+subgraph "Final"
+L  -->  M["Mostrar Uso"]
+M  -->  N["Terminar"]
+end

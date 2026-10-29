@@ -1,0 +1,16 @@
+graph TD
+subgraph "Inicio"
+A["Recibir parametros"]  -->  B{"¿Son validos?"}
+end
+subgraph "Procesamiento"
+B  --> |" Si "| C["Llamar a hexStringToArray(hex, len, out, out_len)"]
+B  --> |" No "| D["Registrar error"]
+end
+subgraph "Impresion"
+C  -->  E["Convertir array de bytes a cadena"]
+C  -->  F["Imprimir cadena de bytes"]
+end
+subgraph "Fin"
+E  -->  G["Finalizar ejecucion"]
+F  -->  G
+end

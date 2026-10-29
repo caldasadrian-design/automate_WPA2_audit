@@ -1,0 +1,12 @@
+graph TD
+subgraph "Inicio"
+A["Recibir parametros"]  -->  B{"¿Son validos?"}
+end
+subgraph "Procesamiento"
+B  --> |" Si "| C["Llamar a funcion()")
+B  --> |" No "| D["Registrar error"]
+end
+subgraph "Final"
+C  -->  E["Retornar resultado"]
+D  -->  E["Retornar error"]
+end

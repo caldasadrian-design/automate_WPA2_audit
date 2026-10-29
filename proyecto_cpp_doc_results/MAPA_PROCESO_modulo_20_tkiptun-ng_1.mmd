@@ -1,0 +1,27 @@
+graph TD
+A["Initialization and Setup"]  -->  B["Initialize variables and structures"]
+B  -->  C["Setup network interface for capturing packets"]
+subgraph "Packet Capture and Processing"
+C  -->  D["Enter loop to capture ARP packets"]
+D  -->  E["Capture ToDS ARP packets"]
+D  -->  F["Capture FromDS ARP packets"]
+E  -->  G{"Both captured?"}
+F  -->  G
+G  --> |" Yes "| H["Perform TKIP chop attack"]
+G  --> |" No "| I["Wait for timeout"]
+end
+subgraph "Attack on TKIP"
+H  -->  J["Modify packets for attack"]
+J  -->  K["Capture keystream and plaintext"]
+K  -->  L["Derive MIC key"]
+end
+subgraph "Derivation of Network Parameters"
+L  -->  M["Derive IP addresses and MAC addresses"]
+end
+subgraph "ARP Request and MIC Countermeasure"
+M  -->  N["Construct and send ARP request"]
+N  -->  O["Wait for MIC countermeasure timeout"]
+O  -->  P["Timeout passed"]
+end
+P  -->  Q["Capture MIC key"]
+Q  -->  R["Potential decryption of encrypted frames"]

@@ -1,0 +1,14 @@
+graph TD
+subgraph "Initialization"
+A["PTW_newattackstate"]  -->  B{"Allocate memory for state"}
+B  -->  C{"Is allocation successful?"}
+end
+subgraph "Processing"
+F["PTW_addsession"]  -->  G{"Check parameters"}
+G  -->  H{"IV seen before?"}
+J  -->  K["Update table and allsessions"]
+K  -->  L["Reallocate memory if needed"]
+end
+subgraph "Cleanup"
+M["PTW_freeattackstate"]  -->  N{"Free allocated memory"}
+end

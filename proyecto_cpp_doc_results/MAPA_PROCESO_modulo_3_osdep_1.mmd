@@ -1,0 +1,23 @@
+graph TD
+subgraph "Inicialización"
+A["wi_alloc"]  -->  B["Asignar memoria para wif"]
+end
+subgraph "Configuración de la Interfaz"
+C["net_open"]  -->  D["Establecer conexión TCP/IP"]
+C  -->  E["Configurar canal y velocidad"]
+C  -->  F["Configurar modo monitor"]
+end
+subgraph "Operaciones de red"
+G["net_write"]  -->  H["Enviar datos"]
+I["net_read"]  -->  J["Llamar a net_get_nopacket"]
+end
+subgraph "Gestión de Paquetes"
+K["net_get_nopacket"]  -->  L["Recibir paquetes desde la red"]
+M["net_read"]  -->  N["Obtener paquetes de la cola"]
+end
+subgraph "Interacción con el Driver"
+O["net_cmd"]  -->  P["Enviar comandos al driver"]
+end
+subgraph "Manejo de la Conexión"
+Q["net_close"]  -->  R["Cerrar la conexión TCP/IP"]
+end

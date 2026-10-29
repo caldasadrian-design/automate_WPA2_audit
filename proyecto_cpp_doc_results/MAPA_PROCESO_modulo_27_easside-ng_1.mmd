@@ -1,0 +1,6 @@
+graph TD
+subgraph "Init"
+A["Start"]  -->  B{"Check params"}
+end
+B  --> |Valid| C["Process"]
+B  --> |Invalid| D["Error"]

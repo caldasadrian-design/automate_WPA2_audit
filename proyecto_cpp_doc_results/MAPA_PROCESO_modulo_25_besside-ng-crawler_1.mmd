@@ -1,0 +1,27 @@
+graph TD
+subgraph "Main"
+A["main(int argc, char * argv[""])"]  -->  B["Initialize resources"]
+B  -->  C["process_directory(const char * dir, time_t begin)"]
+B  -->  D["process_file(const char * file)"]
+end
+subgraph "Directory Processing"
+C  -->  E{"Is directory?"}
+E  --> |Yes| F["opendir()"]
+F  -->  G["readdir()"]
+G  -->  H{"End of directory?"}
+H  --> |No| I["process_file(const char * file)"]
+I  -->  G
+H  --> |Yes| J["closedir()"]
+end
+subgraph "File Processing"
+D  -->  K["pcap_open_offline()"]
+K  -->  L{"Is WPA network?"}
+L  --> |No| M["Close PCAP handle and continue"]
+L  --> |Yes| N["process_eapol_networks(pcap_t * handle, struct bsslist * bsl)"]
+end
+subgraph "EAPOL Network Processing"
+N  -->  O{"Is EAPOL frame?"}
+O  --> |No| P["Close PCAP handle and continue"]
+O  --> |Yes| Q["pcap_dump()"]
+Q  -->  R["Continue processing frames"]
+end

@@ -1,0 +1,26 @@
+graph TD
+subgraph "test-crypto-wpa.c"
+A["Initialize wpa structure"]  -->  B["Set PMK, PTK, MIC, and ESSID"]
+B  -->  C["Call calc_mic"]
+C  -->  D["Compare with expected MIC"]
+D  -->  E{Error?}
+E  --> |" Yes "| F["Increment error count"]
+E  --> |" No "| G["Continue to next test"]
+end
+subgraph "test-digest-sha1.c"
+H["Initialize test vectors"]
+H  -->  I["Call Digest_SHA1"]
+I  -->  J["Compare with expected SHA-1 hash"]
+J  -->  K{Error?}
+K  --> |" Yes "| L["Increment error count"]
+K  --> |" No "| M["Continue to next test"]
+end
+subgraph "test-cipher-arcfour.c"
+N["Initialize test vectors"]
+N  -->  O["Call Cipher_RC4_set_key"]
+O  -->  P["Call Cipher_RC4"]
+P  -->  Q["Compare with expected ciphertext"]
+Q  -->  R{Error?}
+R  --> |" Yes "| S["Increment error count"]
+R  --> |" No "| T["Continue to next test"]
+end

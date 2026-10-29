@@ -1,0 +1,4 @@
+graph TD
+A["void PTW_freeattackstate(PTW_attackstate * state)"]  -->  B["free(state->allsessions)"]
+B  -->  C["free(state)"]
+C  -->  D["return"]

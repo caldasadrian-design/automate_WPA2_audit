@@ -1,0 +1,11 @@
+graph TD
+A["Inicio"]
+A  -->  B["init_atoi()"]
+B  -->  C["init_wpapsk()"]
+C  -->  D["wpapsk_sse()"]
+D  -->  E["HMAC Preparation"]
+E  -->  F["Multiple SHA-1 Hash Operations"]
+F  -->  G["Combining Intermediate Values"]
+G  -->  H["Final PMK"]
+H  -->  I["Endianness Handling"]
+I  -->  J["Fin"]

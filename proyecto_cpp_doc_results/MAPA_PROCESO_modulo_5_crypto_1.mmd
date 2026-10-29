@@ -1,0 +1,24 @@
+graph TD
+subgraph "SHA-256 Initialization"
+A["Digest_SHA256_Create"]  -->  B["Digest_SHA256_Init"]
+end
+subgraph "SHA-256 Processing"
+B  -->  C["Digest_SHA256_Update"]
+C  -->  D["Digest_SHA256_Update"]
+end
+subgraph "SHA-256 Finalization"
+D  -->  E["Digest_SHA256_Finish"]
+E  -->  F["Digest_SHA256_Destroy"]
+end
+subgraph "SHA-256 Convenience Function"
+F  -->  G["Digest_SHA256"]
+end
+subgraph "AES-128-CBC Initialization"
+H["Cipher_AES_Encrypt_Init"]  -->  I["Cipher_AES_Encrypt"]
+end
+subgraph "AES-128-CBC Finalization"
+I  -->  J["Cipher_AES_Encrypt_Deinit"]
+end
+subgraph "ARCFOUR Initialization"
+K["Cipher_RC4_set_key"]  -->  L["Cipher_RC4"]
+end

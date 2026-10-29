@@ -1,0 +1,29 @@
+graph TD
+subgraph "Initialization"
+A["open_card_and_sock"]  -->  B["Initialize network interface"]
+B  -->  C["Set up server socket"]
+end
+subgraph "Main Loop"
+D["serv"]  -->  E["Accept client connections"]
+E  -->  F["handle_server"]
+F  -->  G["client_send_packet"]
+end
+subgraph "Client Management"
+G  -->  H["client_add"]
+H  -->  I["Add new client"]
+G  -->  J["client_kill"]
+J  -->  K["Remove client"]
+end
+subgraph "Network Traffic Handling"
+G  -->  L["handle_card"]
+L  -->  M["Read data from network interface"]
+M  -->  N["Forward data to clients"]
+end
+subgraph "Error Handling"
+E  -->  O{"Client connection failed?"}
+O  --> |" Yes "| P["Log error"]
+O  --> |" No "| Q["Continue accepting connections"]
+F  -->  R{"Client disconnected?"}
+R  --> |" Yes "| S["Log disconnection"]
+R  --> |" No "| T["Continue processing client commands"]
+end

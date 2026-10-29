@@ -1,0 +1,40 @@
+graph TD
+subgraph "Inicio"
+A["Recibir parametros"]  -->  B{"¿Son validos?"}
+end
+subgraph "Validación de Argumentos"
+B  --> |" No "| C["Imprimir mensaje de ayuda"]
+C  -->  D["Terminar"]
+end
+subgraph "Elegir Modo de Ataque"
+B  --> |" Sí "| E{"¿Se especificó un modo de ataque?"}
+end
+subgraph "Selección de Modo de Ataque"
+E  --> |" No "| F["Imprimir mensaje de ayuda"]
+F  -->  G["Terminar"]
+end
+subgraph "Validación de Parametros"
+E  --> |" Sí "| H{"¿Son validos los filtros de longitud?"}
+end
+subgraph "Configuración de Parametros"
+H  --> |" No "| I["Imprimir mensaje de error"]
+I  -->  J["Terminar"]
+end
+subgraph "Inicialización de Privilegios"
+E  --> |" Sí "| K["Deshacer privilegios"]
+end
+subgraph "Abrir Interfaces de Red"
+K  -->  L["Abrir interfaces de entrada y salida"]
+end
+subgraph "Validación de Dirección MAC"
+L  -->  M["¿Dirección MAC especificada es válida y coincide con el dispositivo?"}
+end
+subgraph "Ejecución de Modo de Ataque"
+M  --> |" No "| N["Imprimir mensaje de error"]
+N  -->  O["Terminar"]
+end
+subgraph "Selección de Función de Ataque"
+M  --> |" Sí "| P["Seleccionar función de ataque"]
+P  -->  Q["Ejecutar función de ataque"]
+Q  -->  R["Terminar"]
+end

@@ -1,0 +1,29 @@
+graph TD
+subgraph "Initialization"
+A["cygwin_init"]  -->  B["Initialize mutex"]
+B  -->  C["Check parameters"]
+C  -->  D["Initialize library"]
+D  -->  E["Retrieve GUID"]
+E  -->  F["Open configuration file"]
+end
+subgraph "Setting Channel"
+G["cygwin_set_chan"]  -->  H["Change network channel"]
+end
+subgraph "Injecting Data"
+I["cygwin_inject"]  -->  J["Send data to network device"]
+end
+subgraph "Sniffing Data"
+K["cygwin_sniff"]  -->  L["Read incoming data from network device"]
+end
+subgraph "Getting MAC Address"
+M["cygwin_get_mac"]  -->  N["Retrieve current MAC address"]
+end
+subgraph "Setting MAC Address"
+O["cygwin_set_mac"]  -->  P["Modify registry"]
+P  -->  Q["Restart network device"]
+end
+subgraph "Closing"
+R["cygwin_close"]  -->  S["Close configuration file"]
+S  -->  T["Close registry key"]
+T  -->  U["Unload libraries"]
+end

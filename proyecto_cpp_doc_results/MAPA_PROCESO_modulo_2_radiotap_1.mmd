@@ -1,0 +1,14 @@
+graph TD
+A["Initialize Iterator"]  -->  B{"Is Alignment and Length Valid?"}
+B  --> |" No "| C["Return -EINVAL"]
+B  --> |" Yes "| D["Find Namespace"]
+D  -->  E["Find Override"]
+E  -->  F["Next Field"]
+F  -->  G{"End of Fields?"}
+G  --> |" No "| F
+G  --> |" Yes "| H["Process Field"]
+H  --> |" Is Vendor NS? "| I{"Yes"}
+I  --> |" Yes "| J["Process Vendor Field"]
+I  --> |" No "| K["Process Standard Field"]
+J  -->  H
+K  -->  H

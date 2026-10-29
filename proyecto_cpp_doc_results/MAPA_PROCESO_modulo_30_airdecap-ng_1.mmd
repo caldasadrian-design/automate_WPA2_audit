@@ -1,0 +1,32 @@
+graph TD
+A["Start"]
+A  -->  B["Initialize Variables"]
+B  -->  C["Open Input Capture File"]
+C  -->  D["Initialize Statistics"]
+D  -->  E["Loop through Packets"]
+E  -->  F{"Is Packet WEP?"}
+F  --> |" Yes "| G["Decrypt WEP Packet"]
+G  -->  H["Write Decrypted Packet"]
+H  -->  I["Update Statistics"]
+I  -->  E
+F  --> |" No "| J{"Is Packet WPA?"}
+J  --> |" Yes "| K["Is PTK Valid?"]
+K  --> |" Yes "| L["Decrypt WPA Packet"]
+L  -->  M["Write Decrypted Packet"]
+M  -->  N["Update Statistics"]
+N  -->  E
+J  --> |" No "| O["Is Packet EAPOL?"}
+O  --> |" Yes "| P["Handle EAPOL Packet"]
+P  --> |" No "| Q["Is Packet WDS?"}
+Q  --> |" Yes "| R["Warn No BSSID"]
+R  -->  E
+Q  --> |" No "| S["Log Packet Type"]
+S  -->  E
+F  --> |" No "| T["Log Error"]
+T  -->  E
+E  -->  U{"End of Packets?"}
+U  --> |" Yes "| V["Write Statistics"]
+V  -->  W["Close Output File"]
+W  -->  X["Close Input Capture File"]
+X  -->  Y["End"]
+U  --> |" No "| E

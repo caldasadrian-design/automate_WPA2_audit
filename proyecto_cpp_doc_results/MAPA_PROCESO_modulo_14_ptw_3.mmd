@@ -1,0 +1,37 @@
+graph TD
+A["int PTW_process(PTW_attackstate * state, uint8_t * iv, uint8_t * keystream, int * weight, int total)"]  -->  B{"state != NULL?"}
+B  --> |" No "| C["Error"]
+B  --> |" Si "| D{"iv != NULL?"}
+D  --> |" No "| E["Error"]
+D  --> |" Si "| F{"keystream != NULL?"}
+F  --> |" No "| G["Error"]
+F  --> |" Si "| H{"weight != NULL?"}
+H  --> |" No "| I["Error"]
+H  --> |" Si "| J["int i, j, il, ir;"]
+J  -->  K["i = (iv["0"] << 16) |"  (iv["1"] << 8)  "| (iv["2"])"]
+K  -->  L["il = i / 8"]
+L  -->  M["ir = 1 << (i % 8)"]
+M  -->  N{"(state->seen_iv["il"] & ir) == 0?"}
+N  --> |" No "| O["return SUCCESS"]
+N  --> |Si| P["state->seen_iv["il"] |"relacion"|
+P  -->  Q["for (j = 0; j < total; j++)"]
+Q  -->  R["state->packets_collected++"]
+R  -->  S["guesskeybytes(IVBYTES, iv, &keystream["KSBYTES * j"], buf, PTW_KEYHSBYTES)"]
+S  -->  T["for (i = 0; i < KEYHSBYTES; i++)"]
+T  -->  U["state->table["i"][buf["i"]].votes += weight["j"]"]
+U  -->  V{"(state->allsessions_size < state->packets_collected)?"}
+V  --> |" No "| W[""]
+V  --> |" Si "| X["state->allsessions_size = state->allsessions_size << 1"]
+X  -->  Y["PTW_session * tmp_allsessions = realloc(state->allsessions, state->allsessions_size * sizeof(PTW_session))"]
+Y  -->  Z{"tmp_allsessions != NULL?"}
+Z  --> |" No "| AA["Error"]
+Z  --> |" Si "| AB["state->allsessions = tmp_allsessions"]
+AB  -->  AC["memcpy(state->allsessions["state->packets_collected - 1"].iv, iv, IVBYTES)"]
+AC  -->  AD["memcpy(state->allsessions["state->packets_collected - 1"].keystream, &keystream["KSBYTES * j"], KSBYTES)"]
+AD  -->  AE["state->allsessions["state->packets_collected - 1"].weight = weight["j"]"]
+AE  -->  AF{"(state->sessions_collected < CONTROLSESSIONS)?"}
+AF  --> |" No "| AG["return FAILURE"]
+AF  --> |" Si "| AH["memcpy(state->sessions["state->sessions_collected"].iv, iv, IVBYTES)"]
+AH  -->  AI["memcpy(state->sessions["state->sessions_collected"].keystream, keystream, KSBYTES)"]
+AI  -->  AJ["state->sessions_collected++"]
+AJ  -->  AK["return FAILURE"]

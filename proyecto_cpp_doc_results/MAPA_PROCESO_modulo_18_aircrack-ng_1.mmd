@@ -1,0 +1,28 @@
+graph TD
+subgraph "Initialization"
+A["Start"]  -->  B{"Parse Args"}
+end
+B  --> |Valid| C["Setup Targets"]
+B  --> |Invalid| D["Error"]
+subgraph "Packet Reading"
+E["packet_reader_thread"]  -->  F["Read Packets"]
+end
+subgraph "Target Selection"
+G["Select Targets"]  -->  H["Store in AVL Tree"]
+end
+subgraph "Cracking Modes"
+I{"Brute Force"}  -->  J["perform_wep_crack"]
+K{"Dictionary Attack"}  -->  L["perform_wpa_crack"]
+M{"PTW for WEP"}
+end
+subgraph "Multi-Threaded Cracking"
+N["pthread_create"]  -->  O["Key Guessing"]
+end
+subgraph "Progress Monitoring"
+P["Monitor Progress"]  -->  Q["Update Stats"]
+end
+R["Session Management"]  -->  S["Save Session"]
+T["Signal Handling"]  -->  U{"SIGINT"}
+U  --> |Graceful Exit| V["Save State"]
+W["Memory Management"]  -->  X["Allocate/Deallocate Memory"]
+Y["Output"]  -->  Z["Display Progress"]

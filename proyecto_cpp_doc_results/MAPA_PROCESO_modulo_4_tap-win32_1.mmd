@@ -1,0 +1,31 @@
+graph TD
+A["Initialize Module"]  -->  B["Load Registry Keys"]
+B  -->  C["Set Filesystem Prefixes"]
+C  -->  D["Register TAP Component ID"]
+D  -->  E["Register IOCTLs"]
+E  -->  F["Start Listening for IOCTLs"]
+subgraph "Handle IOCTLs"
+F  -->  G{"Get MAC Address?"}
+G  --> |" Yes "| H["TAP_IOCTL_GET_MAC"]
+G  --> |" No "| I{"Get Version?"}
+I  --> |" Yes "| J["TAP_IOCTL_GET_VERSION"]
+I  --> |" No "| K{"Get MTU?"}
+K  --> |" Yes "| L["TAP_IOCTL_GET_MTU"]
+K  --> |" No "| M{"Get Info?"}
+M  --> |" Yes "| N["TAP_IOCTL_GET_INFO"]
+M  --> |" No "| O{"Configure Point-to-Point?"}
+O  --> |" Yes "| P["TAP_IOCTL_CONFIG_POINT_TO_POINT"]
+O  --> |" No "| Q{"Set Media Status?"}
+Q  --> |" Yes "| R["TAP_IOCTL_SET_MEDIA_STATUS"]
+Q  --> |" No "| S{"Configure DHCP Masquerading?"}
+S  --> |" Yes "| T["TAP_IOCTL_CONFIG_DHCP_MASQ"]
+S  --> |" No "| U{"Get Log Line?"}
+U  --> |" Yes "| V["TAP_IOCTL_GET_LOG_LINE"]
+U  --> |" No "| W{"Configure DHCP Set Opt?"}
+W  --> |" Yes "| X["TAP_IOCTL_CONFIG_DHCP_SET_OPT"]
+W  --> |" No "| Y{"Configure TUN?"}
+Y  --> |" Yes "| Z["TAP_IOCTL_CONFIG_TUN"]
+Y  --> |" No "| AA{"Unknown IOCTL"}
+AA  -->  AB["Log Unknown IOCTL"]
+end
+AB  -->  AC["Shutdown Module"]

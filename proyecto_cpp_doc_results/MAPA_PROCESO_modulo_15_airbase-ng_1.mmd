@@ -1,0 +1,27 @@
+graph TD
+subgraph "Init"
+A["Start"]  -->  B{"Parse Options"}
+end
+C  -->  E["Set Interface"]
+E  -->  F["Setup Data Structures"]
+F  -->  G{"Beacon Flood?"}
+H  -->  J{"Continue?"}
+subgraph "ARP Handling"
+C  -->  L{"Handle ARP?"}
+end
+subgraph "CFRAG Attack"
+C  -->  O{"Perform CFRAG?"}
+P  -->  R{"Continue?"}
+end
+subgraph "Packet Reception"
+F  -->  S["Listen for Packets"]
+S  -->  T["packet_recv"]
+T  -->  U{"Process Packet"}
+U  -->  V["Handle Beacon"]
+U  -->  W["Handle ARP Response"]
+U  -->  X["Perform CFRAG"]
+V  -->  H
+W  -->  M
+X  -->  P
+end
+K  -->  Z["Cleanup Interface"]

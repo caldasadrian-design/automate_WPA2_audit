@@ -1,0 +1,14 @@
+graph TD
+subgraph "Main"
+A["main()"]  -->  B{"Parse options"}
+end
+subgraph "Options Parsing"
+B  -->  C{"Option: -h"}
+subgraph "Packet Creation"
+A  -->  T{"Create packet"}
+subgraph "WEP Encryption"
+P  -->  Z["my_create_wep_packet()"]
+Z  -->  AA{"Set WEP bit"}
+AA  -->  AB["Generate WEP packet"]
+A  -->  AC{"Write packets"}
+AC  -->  AD["write_cap_packet()"]

@@ -1,0 +1,37 @@
+graph TD
+subgraph "Inicio"
+A["Recibir parametros"]  -->  B["Procesar opciones"]
+B  -->  C["Abrir tap device"]  -->  D["Configurar file descriptors"]
+D  -->  E["Deshacer privilegios"]  -->  F["Configurar valores predeterminados"]
+end
+subgraph "File Handling"
+G["Verificar capture file"]  -->  H["Leer encabezado pcap"]
+H  -->  I["Verificar tipo de enlace"]
+end
+subgraph "Packet Processing"
+J["Leer paquete"]  -->  K["Procesar paquete"]
+K  -->  L{"¿Es handshake WPA?"}
+L  --> |" Sí "| M["Capturar handshake"]
+L  --> |" No "| N{"¿Se especifica llave WEP?"}
+N  --> |" Sí "| O["Enviar desautenticación"]
+end
+subgraph "Packet Sending and Receiving"
+P["Leer paquete de tap device"]  -->  Q["Enviar paquete"]
+Q  -->  R["Leer paquete de entrada"]  -->  S["Enviar paquete a tap device"]
+R  -->  T["Manejar WDS bidireccional"]
+end
+subgraph "Main Loop"
+U["Ingresar bucle principal"]  -->  V["Esperar datos en tap device o entrada"]
+V  -->  W["Leer paquete"]
+W  -->  X["Procesar paquete"]
+X  -->  Y["Enviar paquete a destino"]
+end
+subgraph "Error Handling"
+Z["Incluir manejo de errores"]  -->  AA["Imprimir mensajes de error"]
+AA  -->  AB["Salir graciosamente"]
+end
+subgraph "Security Considerations"
+AC["Reducir privilegios"]  -->  AD["Verificar archivos pcap"]
+AD  -->  AE["Manejar encrypción y llaves WEP de manera segura"]
+end
+A  -->  B  -->  C  -->  D  -->  E  -->  F  -->  G  -->  H  -->  I  -->  J  -->  K  -->  L  -->  M  -->  N  -->  O  -->  P  -->  Q  -->  R  -->  S  -->  T  -->  U  -->  V  -->  W  -->  X  -->  Y  -->  Z  -->  AA  -->  AC  -->  AD  -->  AE
