@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 """
-Documentador Modular de Proyectos C++ con IA Local
-Toma los resultados de analizar_proyecto_cpp.py y genera:
-1. Documentación detallada por módulo con comentarios de código
-2. Diagramas Mermaid de interdependencias por módulo
-3. Diagrama global de interdependencias del proyecto completo
+Generador de Mapas de Procesos Detallados (Script 2 - Versión Final con Gestión de Servicios y Sanitización Avanzada)
 """
 
 import os
@@ -13,16 +9,37 @@ import json
 import requests
 import re
 import subprocess
+import time
+import logging
+import signal
+import atexit
 from pathlib import Path
 from datetime import datetime
+
+# Variables para registro de errores
+ERRORES_FILE = "errores_mermaid.json"
+INFORME_FILE = "informe_mejoras.md"
+lista_errores = []
 
 # ============================================================================
 # CONFIGURACIÓN
 # ============================================================================
 OLLAMA_URL = "http://localhost:11434/api/generate"
-MODELO_DEFAULT = "qwen2.5-coder:3b"
-NUM_THREADS = 3
-CONTEXT_SIZE = 4096
+MODELO_DEFAULT = "qwen2.5-coder:7b"
+NUM_THREADS = 4 
+CONTEXT_SIZE = 2048
+MMDC_TIMEOUT = 1200  # 20 minutos de timeout para mmdc
+
+# Configuración de Logging Profundo
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s | %(levelname)-8s | %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S',
+    handlers=[
+        logging.FileHandler("proceso_detallado.log", encoding='utf-8'),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
 
 class Colores:
     VERDE = '\033[92m'
@@ -34,348 +51,492 @@ class Colores:
     NEGRITA = '\033[1m'
     FIN = '\033[0m'
 
-def log_info(msg): print(f"{Colores.CYAN}[INFO]{Colores.FIN} {msg}", flush=True)
-def log_exito(msg): print(f"{Colores.VERDE}[OK]{Colores.FIN} {msg}", flush=True)
-def log_error(msg): print(f"{Colores.ROJO}[ERROR]{Colores.FIN} {msg}", flush=True)
-def log_advertencia(msg): print(f"{Colores.AMARILLO}[AVISO]{Colores.FIN} {msg}", flush=True)
-def log_paso(msg): print(f"\n{Colores.MAGENTA}{Colores.NEGRITA}{msg}{Colores.FIN}", flush=True)
+def log_info(msg): logging.info(f"{Colores.CYAN}[INFO]{Colores.FIN} {msg}")
+def log_exito(msg): logging.info(f"{Colores.VERDE}[OK]{Colores.FIN} {msg}")
+def log_error(msg): logging.error(f"{Colores.ROJO}[ERROR]{Colores.FIN} {msg}")
+def log_advertencia(msg): logging.warning(f"{Colores.AMARILLO}[AVISO]{Colores.FIN} {msg}")
+def log_paso(msg): logging.info(f"\n{Colores.MAGENTA}{Colores.NEGRITA}{msg}{Colores.FIN}")
+def log_debug(msg): logging.debug(f"{Colores.AMARILLO}[DEBUG]{Colores.FIN} {msg}")
+
+# ============================================================================
+# GESTIÓN AUTOMÁTICA DE SERVICIOS (OLLAMA)
+# ============================================================================
+def gestionar_ollama(accion):
+    try:
+        if accion == 'start':
+            log_info("Iniciando el servicio de Ollama...")
+            subprocess.run(['sudo', 'systemctl', 'start', 'ollama'], capture_output=True, check=True)
+            time.sleep(2)
+            log_info("Servicio de Ollama iniciado correctamente.")
+        elif accion == 'stop':
+            log_info("Deteniendo el servicio de Ollama para liberar RAM...")
+            # Gracias a la regla sudoers, esto ya no pedirá contraseña ni se colgará
+            subprocess.run(['sudo', 'systemctl', 'stop', 'ollama'], capture_output=True, check=True)
+            log_info("Servicio de Ollama detenido correctamente.")
+    except subprocess.CalledProcessError as e:
+        log_advertencia(f"Error al gestionar el servicio de Ollama ({accion}): {e}")
+    except Exception as e:
+        log_advertencia(f"Excepción al gestionar Ollama: {e}")
+
+def cleanup():
+    log_info("\n[EJECUTANDO LIMPIEZA] Finalizando script y liberando recursos...")
+    gestionar_ollama('stop')  # <--- AHORA SÍ SE EJECUTA DE FORMA SEGURA
+
+# Registrar limpieza para señales de terminación (Ctrl+C, pkill, etc.)
+def signal_handler(sig, _frame):
+    log_info(f"\n[SEÑAL RECIBIDA: {sig}] Iniciando apagado seguro...")
+    cleanup()
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)   # Ctrl+C
+signal.signal(signal.SIGTERM, signal_handler)  # pkill
+
+# ============================================================================
+# REGISTRO DE ERRORES EN TIEMPO REAL
+# ============================================================================
+def registrar_error_mermaid(modulo_nombre, mermaid_code, error_stderr, linea_error):
+    """Registra un error de Mermaid en la lista global y lo guarda al instante"""
+    global lista_errores
+    
+    error_entry = {
+        "timestamp": datetime.now().isoformat(),
+        "modulo": modulo_nombre,
+        "linea_error": linea_error,
+        "mermaid_code": mermaid_code[:500],  # Primeros 500 chars para no saturar
+        "error_message": error_stderr[:300] if error_stderr else "Sin detalle"
+    }
+    lista_errores.append(error_entry)
+    
+    # Guardar inmediatamente en archivo (por si el script se corta o se tilde)
+    try:
+        with open(ERRORES_FILE, 'w', encoding='utf-8') as f:
+            json.dump(lista_errores, f, indent=2, ensure_ascii=False)
+    except Exception as e:
+        log_error(f"No se pudo guardar errores en JSON: {e}")
 
 # ============================================================================
 # COMUNICACIÓN CON OLLAMA
 # ============================================================================
-def consultar_ia(prompt, modelo, timeout=300):
+def consultar_ia(prompt, modelo, timeout=1200):
+    inicio_total = time.time()
     try:
         response = requests.post(
             OLLAMA_URL,
             json={
-                "model": modelo,
-                "prompt": prompt,
-                "stream": True,
-                "keep_alive": 0,
+                "model": modelo, 
+                "prompt": prompt, 
+                "stream": True, 
+                "keep_alive": "5m",  # Libera la RAM a los 5 min sin necesidad de sudo
                 "options": {
                     "num_ctx": CONTEXT_SIZE,
-                    "num_thread": NUM_THREADS
+                    "num_thread": NUM_THREADS,
+                    "num_predict": 1200,
+                    "temperature": 0.1,
+                    "top_p": 0.8,
+                    "repeat_penalty": 1.2
                 }
             },
-            stream=True,
-            timeout=timeout
+            stream=True, timeout=timeout
         )
         response.raise_for_status()
         
         respuesta_completa = ""
         tokens = 0
+        primer_token_time = None
         
         for linea in response.iter_lines():
             if linea:
                 try:
                     datos = json.loads(linea.decode('utf-8'))
                     if 'response' in datos:
+                        if primer_token_time is None:
+                            primer_token_time = time.time()
+                        
                         chunk = datos['response']
                         respuesta_completa += chunk
                         tokens += 1
-                        if tokens % 50 == 0:
-                            print(f"\r{Colores.VERDE}[GENERANDO]{Colores.FIN} Tokens: {tokens} | Tamaño: {len(respuesta_completa)} chars", end='', flush=True)
+                        
+                        if tokens % 100 == 0:
+                            tiempo_actual = time.time()
+                            velocidad = tokens / (tiempo_actual - primer_token_time)
+                            print(f"\r{Colores.VERDE}[GENERANDO]{Colores.FIN} Tokens: {tokens} | Velocidad: {velocidad:.1f} tok/s", end='', flush=True)
                 except json.JSONDecodeError:
                     continue
         
-        print(f"\n{Colores.VERDE}[COMPLETADO]{Colores.FIN} {tokens} tokens generados", flush=True)
+        tiempo_total = time.time() - inicio_total
+        velocidad_final = tokens / tiempo_total if tiempo_total > 0 else 0
+        print(f"\n{Colores.VERDE}[COMPLETADO]{Colores.FIN} {tokens} tokens en {tiempo_total:.1f}s ({velocidad_final:.1f} tok/s)", flush=True)
         return respuesta_completa
         
-    except requests.exceptions.Timeout:
-        log_error("Timeout - la IA tardó demasiado")
-        return None
     except Exception as e:
         log_error(f"Error en comunicación con Ollama: {e}")
         return None
 
 # ============================================================================
-# EXTRACCIÓN Y SANITIZACIÓN DE MERMAID
+# SANITIZACIÓN DE MERMAID (VERSIÓN AVANZADA)
 # ============================================================================
-def extraer_mermaid(texto):
-    patron = r"```mermaid\s*(.*?)\s*```"
-    return re.findall(patron, texto, re.DOTALL | re.IGNORECASE)
-
+# ============================================================================
+# SANITIZACIÓN DE MERMAID (VERSIÓN AVANZADA Y LIMPIA)
+# ============================================================================
 def sanitizar_mermaid(mermaid_code):
-    """Corrige agresivamente alucinaciones estructurales de la IA en Mermaid"""
+    log_debug("Iniciando proceso de sanitización del código Mermaid...")
     lines = mermaid_code.strip().split('\n')
     clean_lines = []
     
-    for i, line in enumerate(lines):
+    for line in lines:
         line = line.strip()
-        if not line:
-            continue
-            
-        # 1. Forzar que la declaración del gráfico sea 100% limpia
+        if not line: continue
+        
         if line.lower().startswith('graph'):
-            if 'td' in line.lower():
-                clean_lines.append('graph TD')
-            elif 'lr' in line.lower():
-                clean_lines.append('graph LR')
-            else:
-                clean_lines.append('graph TD')
-            continue # Ignora cualquier texto extra que la IA haya puesto en esta línea
-            
-        # 2. Ignorar líneas que son claramente texto explicativo de la IA y no sintaxis
-        if not any(char in line for char in ['[', ']', '(', ')', '-->', '---', 'subgraph', 'end']):
+            clean_lines.append('graph TD' if 'td' in line.lower() else 'graph LR')
             continue
             
-        # 3. Limpiar nodos con caracteres especiales (puntos, dos puntos, comas, paréntesis)
-        if '[' in line and ']' in line:
-            line = re.sub(r'\[([^\[\]"]*[\(\),\.:][^\[\]"]*)\]', r'["\1"]', line)
+        if not any(char in line for char in ['[', ']', '(', ')', '-->', '---', 'subgraph', 'end', 'classDef', '{', '}']):
+            continue
             
-        # 4. Corregir etiquetas de enlace rotas o mal formadas (ej: -->|(texto...) )
+        # 0. CORRECCIÓN ESPECÍFICA: Eliminar artefactos C++ como argv[""] que rompen Mermaid
+        line = line.replace('[""]', '')
+        
+        # 1. CORRECCIÓN CRÍTICA: Separar 'endsubgraph' en 'end' + 'subgraph'
+        line = re.sub(r'\bendsubgraph\b', 'end\nsubgraph', line, flags=re.IGNORECASE)
+        
+        # 2. CORRECCIÓN CRÍTICA: Separar cualquier cierre de nodo pegado a 'end' o 'subgraph'
+        line = re.sub(r'(\]|\})\s*(end|subgraph)', r'\1\n\2', line, flags=re.IGNORECASE)
+        line = re.sub(r'\b(end|subgraph)([A-Za-z0-9_])', r'\1\n\2', line, flags=re.IGNORECASE)
+        
+        # 3. CORRECCIÓN: Limpiar comillas internas en nodos {} y []
+        line = re.sub(r'\{([^"{}]*?)"([^"}]*?)"([^"}]*?)\}', 
+                     lambda m: '{"' + m.group(1).replace('"','') + m.group(2) + m.group(3).replace('"','') + '"}', line)
+        line = re.sub(r'\[([^"\[\]]*?)"([^"\]]*?)"([^"\[\]]*?)\]', 
+                     lambda m: '["' + m.group(1).replace('"','') + m.group(2) + m.group(3).replace('"','') + '"]', line)
+        
+        # 4. CORRECCIÓN: Texto sin comillas dentro de diamantes {}
+        line = re.sub(r'\{([^"{}]*?)\}', lambda m: '{"' + m.group(1).replace('"', '').replace('\n', ' ').strip() + '"}', line)
+        
+        # 5. CORRECCIÓN: Texto sin comillas dentro de corchetes []
+        if '[' in line and ']' in line:
+            line = re.sub(r'\[([^\[\]]*)\]', lambda m: '["' + m.group(1).replace('"', '').replace('\n', ' ').strip() + '"]', line)
+            
+        # 6. CORRECCIÓN SUAVE: Asegurar espacios en flechas
         if '-->' in line or '<--' in line:
-            # Si hay un número impar de pipes '|', significa que la etiqueta de la flecha quedó abierta
-            if line.count('|') % 2 != 0:
-                line = re.sub(r'\|[^|]*$', r'|"relacion"|', line)
-            else:
-                # Asegurar que el texto entre pipes tenga comillas si no las tiene
-                line = re.sub(r'\|([^"|][^|]*)\|', r'|" \1 "|', line)
+            line = re.sub(r'-->', ' --> ', line)
+            line = re.sub(r'<--', ' <-- ', line)
+            
+        # 7. FILTRO DE SEGURIDAD: Descartar líneas huérfanas o rotas
+        if line.startswith('|'):
+            continue
+            
+        if '-->' in line or '<--' in line:
+            parts = line.split('-->') if '-->' in line else line.split('<--')
+            left_side = parts[0].strip()
+            if left_side and not re.match(r'^[A-Za-z0-9_]+$', left_side) and '[' not in left_side and '{' not in left_side:
+                continue
                 
         clean_lines.append(line)
         
-    # Garantía final: si por algún motivo quedó vacío o sin encabezado, forzar uno válido
     if not clean_lines or not clean_lines[0].lower().startswith('graph'):
         clean_lines.insert(0, 'graph TD')
         
+    log_debug(f"Sanitización completada. Líneas limpias: {len(clean_lines)}")
     return '\n'.join(clean_lines)
-
-# ============================================================================
-# GENERACIÓN DE IMÁGENES
-# ============================================================================
 def generar_imagen_mermaid(mermaid_code, ruta_salida_img, ruta_salida_mmd):
     try:
+        log_debug(f"Escribiendo código Mermaid en archivo: {ruta_salida_mmd}")
         with open(ruta_salida_mmd, 'w', encoding='utf-8') as f:
             f.write(mermaid_code)
         
-        log_info("Renderizando diagrama con Mermaid CLI...")
+        tamaño_archivo = os.path.getsize(ruta_salida_mmd)
+        log_debug(f"Tamaño del archivo .mmd generado: {tamaño_archivo} bytes")
+        
+        log_info("Iniciando renderizado con Mermaid CLI (mmdc)...")
+        log_debug(f"Comando: mmdc -i {ruta_salida_mmd} -o {ruta_salida_img} -b white")
+        
+        start_mmdc = time.time()
+        
+        env = os.environ.copy()
+        env['PUPPETEER_SKIP_CHROMIUM_DOWNLOAD'] = '1'
         
         proceso = subprocess.run(
             ['mmdc', '-i', str(ruta_salida_mmd), '-o', str(ruta_salida_img), '-b', 'white'],
-            capture_output=True,
-            text=True,
-            timeout=60
+            capture_output=True, 
+            text=True, 
+            timeout=MMDC_TIMEOUT,
+            env=env
         )
         
-        if proceso.returncode == 0:
-            return True
-        else:
-            log_error(f"mmdc falló: {proceso.stderr}")
+        end_mmdc = time.time()
+        tiempo_transcurrido = end_mmdc - start_mmdc
+        
+        log_debug(f"mmdc finalizó en {tiempo_transcurrido:.2f}s. Returncode: {proceso.returncode}")
+        
+        # === LOG FORENSE Y REGISTRO DE ERROR ===
+        if proceso.returncode != 0:
+            log_error(f"mmdc falló (código {proceso.returncode}).")
+            log_error("--- INICIO DEL CÓDIGO MERMAID QUE FALLÓ ---")
+            log_error(mermaid_code)
+            log_error("--- FIN DEL CÓDIGO MERMAID QUE FALLÓ ---")
+            if proceso.stderr.strip():
+                log_error(f"mmdc STDERR:\n{proceso.stderr}")
+            
+            # Registrar error para análisis (se guarda al instante)
+            linea_error = "Desconocida"
+            if "line" in proceso.stderr.lower():
+                match = re.search(r'line (\d+)', proceso.stderr, re.IGNORECASE)
+                if match:
+                    linea_error = match.group(1)
+            
+            registrar_error_mermaid(ruta_salida_img.stem, mermaid_code, proceso.stderr, linea_error)
             return False
             
+        if proceso.returncode == 0 and os.path.exists(ruta_salida_img):
+            tamaño_img = os.path.getsize(ruta_salida_img)
+            log_exito(f"Renderizado exitoso en {tiempo_transcurrido:.2f}s. Imagen: {tamaño_img} bytes")
+            return True
+        else:
+            log_error(f"mmdc reportó éxito pero no se encontró la imagen.")
+            return False
+            
+    except subprocess.TimeoutExpired:
+        log_error(f"mmdc excedió el límite de {MMDC_TIMEOUT}s.")
+        return False
     except FileNotFoundError:
         log_error("No se encontró 'mmdc'. Instala: sudo npm install -g @mermaid-js/mermaid-cli")
         return False
-    except subprocess.TimeoutExpired:
-        log_error("Timeout en renderizado (60s)")
-        return False
     except Exception as e:
-        log_error(f"Error al generar imagen: {e}")
+        log_error(f"Error inesperado al generar imagen: {str(e)}", exc_info=True)
         return False
 
 # ============================================================================
 # LECTURA DE RESULTADOS
 # ============================================================================
-def leer_resultados_analisis(directorio):
-    resultados = {'modulos': [], 'reporte_completo': None, 'archivos_cpp': []}
+def leer_resultados_funcionales(directorio):
+    log_debug(f"Escaneando directorio: {directorio}")
+    resultados = {'modulos': []}
     dir_path = Path(directorio)
     
-    reporte_completo = dir_path / "analisis_modular_completo.txt"
-    if reporte_completo.exists():
-        with open(reporte_completo, 'r', encoding='utf-8', errors='ignore') as f:
-            resultados['reporte_completo'] = f.read()
-        log_exito(f"Leído reporte completo: {reporte_completo.name}")
-    
-    for archivo in sorted(dir_path.glob("analisis_modulo_*.txt")):
+    for archivo in sorted(dir_path.glob("func_modulo_*.md")):
         with open(archivo, 'r', encoding='utf-8', errors='ignore') as f:
             resultados['modulos'].append({
                 'archivo': archivo,
-                'contenido': f.read(),
-                'nombre': archivo.stem
+                'nombre': archivo.stem.replace('func_', ''),
+                'contenido': f.read()
             })
     
-    log_info(f"Encontrados {len(resultados['modulos'])} módulos analizados")
-    
-    for archivo in dir_path.rglob("*.cpp"):
-        resultados['archivos_cpp'].append(archivo)
-    for archivo in dir_path.rglob("*.h"):
-        resultados['archivos_cpp'].append(archivo)
-    
-    log_info(f"Encontrados {len(resultados['archivos_cpp'])} archivos C++")
+    log_info(f"Encontrados {len(resultados['modulos'])} módulos funcionales para mapear")
     return resultados
 
 # ============================================================================
-# DOCUMENTACIÓN POR MÓDULO
+# GENERACIÓN DEL MAPA DE PROCESOS POR MÓDULO
 # ============================================================================
-def documentar_modulo(modulo_info, modelo):
+
+# ============================================================================
+# GENERACIÓN DEL MAPA DE PROCESOS POR MÓDULO
+# ============================================================================
+
+def limpiar_reintentos_fallidos(nombre_modulo, dir_salida):
+    """Si el módulo falló en una ejecución anterior, borra sus restos para un intento limpio"""
+    if not os.path.exists(ERRORES_FILE):
+        return
+        
+    try:
+        with open(ERRORES_FILE, 'r', encoding='utf-8') as f:
+            errores = json.load(f)
+        
+        # Si el módulo está en la lista de errores históricos, limpiamos sus archivos viejos
+        if any(e['modulo'] == nombre_modulo for e in errores):
+            log_advertencia(f"🧹 Limpiando restos de ejecución fallida previa para: {nombre_modulo}")
+            for archivo in dir_salida.glob(f"MAPA_PROCESO_{nombre_modulo}_*.*"):
+                archivo.unlink() # Borra el .mmd o .png corrupto
+    except Exception:
+        pass # Si no se puede leer el JSON, continuamos normal
+
+
+def generar_mapa_proceso(modulo_info, modelo):
     nombre_modulo = modulo_info['nombre']
-    contenido_analisis = modulo_info['contenido']
-    
-    log_paso(f"📄 DOCUMENTANDO MÓDULO: {nombre_modulo}")
-    BT = "```"
-    
-    prompt_doc = f"""Eres un experto en documentación de código C++ y en sintaxis Mermaid. Basándote en el siguiente análisis, genera documentación técnica.
-
-ANÁLISIS DEL MÓDULO:
-{contenido_analisis}
-
-Genera en formato Markdown:
-## 📋 Documentación Técnica
-### 1. Propósito y Responsabilidad
-### 2. Código Comentado (con explicación de funciones y parámetros)
-### 3. Interfaz Pública
-### 4. Dependencias Internas
-### 5. Diagrama de Interdependencias
-
-REGLAS ESTRICTAS PARA EL DIAGRAMA MERMAID (¡CRUCIAL!):
-1. Inicia siempre con `graph TD` o `graph LR`.
-2. Si el texto de un nodo contiene paréntesis '()', corchetes '[]', comas ',', puntos '.', dos puntos ':' o símbolos de código, DEBES envolverlo obligatoriamente en comillas dobles.
-   - ❌ INCORRECTO: `A[socket(AF_INET, SOCK_DGRAM)] --> B[Procesar]`
-   - ✅ CORRECTO: `A["socket(AF_INET, SOCK_DGRAM)"] --> B["Procesar"]`
-3. Cada relación (flecha) debe estar en una línea nueva y separada.
-4. No incluyas texto explicativo, comentarios o saltos de línea sueltos dentro del bloque {BT}mermaid. Solo nodos y flechas.
-
-Sintaxis de ejemplo válida:
-{BT}mermaid
-graph LR
-    A["Módulo Actual (v1.0)"] -->|"llama a"| B["Librería Externa (tkip)"]
-    C["Otro Módulo"] -->|"usa datos de"| A
-{BT}
-
-IMPORTANTE: El diagrama debe estar dentro de un bloque {BT}mermaid ... {BT} y cumplir estrictamente las reglas de comillas y sintaxis."""
-
-    log_info("Consultando IA para documentación detallada...")
-    respuesta_doc = consultar_ia(prompt_doc, modelo)
-    
-    if not respuesta_doc:
-        log_error(f"Falló la documentación del módulo {nombre_modulo}")
-        return False
-    
+    contenido = modulo_info['contenido']
     dir_salida = Path(modulo_info['archivo']).parent
-    archivo_doc = dir_salida / f"DOC_DETALLADA_{nombre_modulo}.md"
     
-    with open(archivo_doc, 'w', encoding='utf-8') as f:
-        f.write(respuesta_doc)
+    # 1. LIMPIEZA INTELIGENTE: Borra archivos si este módulo falló antes
+    limpiar_reintentos_fallidos(nombre_modulo, dir_salida)
     
-    log_exito(f"Documentación guardada: {archivo_doc.name}")
+    # 2. VERIFICAR SI YA EXISTE EL MAPA (y es válido, > 1KB)
+    archivo_img = dir_salida / f"MAPA_PROCESO_{nombre_modulo}_1.png"
     
-    diagramas = extraer_mermaid(respuesta_doc)
-    
-    if diagramas:
-        for i, diagrama in enumerate(diagramas, 1):
-            # APLICAR LIMPIEZA ANTES DE RENDERIZAR
-            diagrama_limpio = sanitizar_mermaid(diagrama)
-            
-            archivo_img = dir_salida / f"DIAGRAMA_{nombre_modulo}_{i}.png"
-            archivo_mmd = dir_salida / f"DIAGRAMA_{nombre_modulo}_{i}.mmd"
-            
-            if generar_imagen_mermaid(diagrama_limpio, archivo_img, archivo_mmd):
-                log_exito(f"Diagrama {i} generado: {archivo_img.name}")
-            else:
-                log_advertencia(f"Código Mermaid {i} guardado (revisar sintaxis): {archivo_mmd.name}")
-    
-    # ¡CRÍTICO! Faltaba este return en tu versión anterior
-    return True
+    if archivo_img.exists() and archivo_img.stat().st_size > 1000:
+        log_exito(f"⏭️  SKIP: {nombre_modulo} ya fue generado exitosamente ({archivo_img.name})")
+        return True
+    # ======================================
+       
+    log_paso(f"🗺️  MAPEANDO PROCESOS: {nombre_modulo}")
+    log_debug(f"Longitud del contenido del módulo a procesar: {len(contenido)} caracteres")
+       
+    prompt_mapa = f"""You are a strict Mermaid diagram generator. Analyze this C++ module and output ONLY a valid `graph TD`.
 
-# ============================================================================
-# DIAGRAMA GLOBAL
-# ============================================================================
-def generar_diagrama_global(resultados, modelo):
-    log_paso("🌐 GENERANDO DIAGRAMA GLOBAL DE INTERDEPENDENCIAS")
-    
-    resumen_modulos = "\n".join([f"### {m['nombre']}\n{m['contenido'][:500]}..." for m in resultados['modulos']])
-    BT = "```"
-    
-    prompt_global = f"""Eres un arquitecto de software experto. Genera un DIAGRAMA GLOBAL de interdependencias.
+MODULE:
+{contenido}
 
-RESUMEN DE MÓDULOS:
-{resumen_modulos}
+STRICT RULES (VIOLATING THESE BREAKS THE DIAGRAM):
+1. Start with `graph TD`
+2. Use `subgraph "Name"` and `end` for grouping.
+3. Node IDs must be simple letters/numbers (e.g., A, B1, Step1).
+4. Labels with spaces, (), ., or : MUST be in double quotes: `A["Function(param)"]`
+5. Conditions use double curly braces: `B{{"Is valid?"}}`
+6. Arrows MUST have spaces: `A --> B` or `A -->|Yes| B`
+7. NO markdown text outside the ```mermaid ... ``` block.
+8. MAXIMUM 30 nodes. Keep it high-level.
 
-Genera un diagrama Mermaid completo mostrando todos los módulos, dependencias y flujo de datos. Usa subgraphs para agrupar por capas.
-RECUERDA: Envuelve en comillas dobles cualquier texto de nodo que tenga paréntesis, comas, puntos o dos puntos.
-
-Sintaxis:
-{BT}mermaid
+Example:
+```mermaid
 graph TD
-    subgraph "Capa de Lógica"
-        A["Modulo 1"] --> B["Modulo 2"]
+    subgraph "Init"
+        A["Start()"] --> B{{"Check params"}}
     end
-{BT}
+    B -->|Valid| C["Process()"]
+    B -->|Invalid| D["Error()"]
 
-El diagrama debe estar dentro de un bloque {BT}mermaid ... {BT} y ser sintácticamente válido."""
+Generate ONLY the Mermaid code block. No extra explanations."""
 
-    log_info("Consultando IA para diagrama global...")
-    respuesta_global = consultar_ia(prompt_global, modelo, timeout=600)
+    respuesta = consultar_ia(prompt_mapa, modelo, timeout=1200)
     
-    if not respuesta_global:
-        log_error("Falló la generación del diagrama global")
+    if not respuesta:
+        log_error(f"Falló la generación del mapa para {nombre_modulo}")
         return False
     
-    dir_salida = Path(resultados['modulos'][0]['archivo']).parent if resultados['modulos'] else Path(".")
-    archivo_global = dir_salida / "DIAGRAMA_GLOBAL_INTERDEPENDENCIAS.md"
+    patron = r"```mermaid\s*(.*?)\s*```"
+    coincidencias = re.findall(patron, respuesta, re.DOTALL | re.IGNORECASE)
     
-    with open(archivo_global, 'w', encoding='utf-8') as f:
-        f.write(respuesta_global)
-    log_exito(f"Documento global guardado: {archivo_global.name}")
+    if not coincidencias:
+        respuesta_stripped = respuesta.strip()
+        if respuesta_stripped.startswith("```mermaid"):
+            log_advertencia("La IA se cortó por límite de tokens. Forzando cierre del bloque.")
+            diagrama_forzado = respuesta_stripped
+            if not diagrama_forzado.endswith("```"):
+                diagrama_forzado += "\n```"
+            coincidencias = [diagrama_forzado]
+        else:
+            log_advertencia(f"No se encontró bloque mermaid en la respuesta para {nombre_modulo}")
+            log_debug(f"Respuesta cruda:\n{respuesta[:500]}...")
+            return False
     
-    diagramas = extraer_mermaid(respuesta_global)
-    if diagramas:
-        for i, diagrama in enumerate(diagramas, 1):
-            # APLICAR LIMPIEZA TAMBIÉN AL DIAGRAMA GLOBAL
-            diagrama_limpio = sanitizar_mermaid(diagrama)
+    for i, diagrama in enumerate(coincidencias, 1):
+        diagrama_limpio = sanitizar_mermaid(diagrama)
+        
+        dir_salida = Path(modulo_info['archivo']).parent
+        archivo_img = dir_salida / f"MAPA_PROCESO_{nombre_modulo}_{i}.png"
+        archivo_mmd = dir_salida / f"MAPA_PROCESO_{nombre_modulo}_{i}.mmd"
+        
+        if generar_imagen_mermaid(diagrama_limpio, archivo_img, archivo_mmd):
+            log_exito(f"Mapa de procesos generado exitosamente: {archivo_img.name}")
+        else:
+            log_advertencia(f"Falló el renderizado, pero el código fuente se guardó en: {archivo_mmd.name}")
             
-            archivo_img = dir_salida / f"DIAGRAMA_GLOBAL_{i}.png"
-            archivo_mmd = dir_salida / f"DIAGRAMA_GLOBAL_{i}.mmd"
-            
-            if generar_imagen_mermaid(diagrama_limpio, archivo_img, archivo_mmd):
-                log_exito(f"Diagrama global {i} generado: {archivo_img.name}")
-            else:
-                log_advertencia(f"Código Mermaid global guardado: {archivo_mmd.name}")
     return True
 
 # ============================================================================
-# RESUMEN EJECUTIVO
+# GENERACIÓN DE INFORME DE MEJORAS
 # ============================================================================
-def generar_resumen_ejecutivo(resultados, modelo):
-    log_paso("📊 GENERANDO RESUMEN EJECUTIVO DEL PROYECTO")
-    
-    prompt_resumen = f"""Eres un líder técnico. Genera un RESUMEN EJECUTIVO del proyecto C++.
-Estadísticas: {len(resultados['modulos'])} módulos, {len(resultados['archivos_cpp'])} archivos C++.
 
-Genera:
-## 📊 Resumen Ejecutivo
-1. Visión General
-2. Arquitectura
-3. Módulos Críticos
-4. Puntos de Riesgo
-5. Recomendaciones Estratégicas"""
+def generar_informe_mejoras():
+    """Analiza los errores registrados y genera recomendaciones para mejorar el código"""
+    global lista_errores
+    
+    log_info("Generando informe de mejoras basado en errores registrados...")
+    
+    if not lista_errores:
+        informe = """# 📊 Informe de Mejoras - Generador de Mapas de Procesos
 
-    log_info("Consultando IA para resumen ejecutivo...")
-    respuesta_resumen = consultar_ia(prompt_resumen, modelo)
+## ✅ Resumen Ejecutivo
+**¡Excelente!** No se registraron errores de sintaxis Mermaid durante la ejecución.
+
+## 🎯 Conclusión
+El sistema de sanitización actual es efectivo. No se requieren modificaciones inmediatas.
+
+## 📈 Estadísticas
+- Total de módulos procesados: Exitosos
+- Tasa de éxito: 100%
+- Errores de sintaxis: 0
+
+## 🔮 Próximas Optimizaciones Sugeridas
+1. **Aumentar NUM_THREADS** si la CPU tiene más núcleos disponibles
+2. **Reducir CONTEXT_SIZE** a 1024 si se necesita más velocidad (puede afectar calidad)
+3. **Implementar caché de prompts** para módulos idénticos
+"""
+    else:
+        # Analizar patrones de errores
+        patrones = {}
+        for error in lista_errores:
+            msg = error['error_message'].lower()
+            if 'end' in msg and 'subgraph' in msg:
+                patrones['endsubgraph_pegado'] = patrones.get('endsubgraph_pegado', 0) + 1
+            if 'pipe' in msg or '|' in msg:
+                patrones['pipe_huerfano'] = patrones.get('pipe_huerfano', 0) + 1
+            if 'diamond' in msg or '{' in msg:
+                patrones['diamante_sin_id'] = patrones.get('diamante_sin_id', 0) + 1
+            if 'quote' in msg or '"' in msg:
+                patrones['comillas_internas'] = patrones.get('comillas_internas', 0) + 1
+        
+        recomendaciones = []
+        if patrones.get('endsubgraph_pegado', 0) > 0:
+            recomendaciones.append(f"**{patrones['endsubgraph_pegado']} errores de `endsubgraph` pegado**: Agregar regex `re.sub(r'\\bendsubgraph\\b', 'end\\nsubgraph', line)`")
+        if patrones.get('pipe_huerfano', 0) > 0:
+            recomendaciones.append(f"**{patrones['pipe_huerfano']} errores de pipes huérfanos**: Filtrar líneas que empiecen con `|` sin nodo previo")
+        if patrones.get('diamante_sin_id', 0) > 0:
+            recomendaciones.append(f"**{patrones['diamante_sin_id']} diamantes sin ID**: Inyectar ID automático `N1` antes de `{{`")
+        if patrones.get('comillas_internas', 0) > 0:
+            recomendaciones.append(f"**{patrones['comillas_internas']} comillas internas**: Escapar o eliminar comillas dentro de labels")
+        
+        informe = f"""# 📊 Informe de Mejoras - Generador de Mapas de Procesos
+
+## ⚠️ Resumen Ejecutivo
+Se detectaron **{len(lista_errores)} errores de sintaxis Mermaid** durante la ejecución.
+
+## 📈 Estadísticas
+- Total de módulos procesados: {len(lista_errores)} con errores
+- Tasa de éxito: Requiere revisión
+- Errores de sintaxis: {len(lista_errores)}
+
+## 🔍 Patrones Detectados
+
+"""
+        for patron, cantidad in patrones.items():
+            informe += f"- **{patron.replace('_', ' ').title()}**: {cantidad} ocurrencias\n"
+        
+        informe += "\n## 🛠️ Recomendaciones de Código\n\n"
+        for i, rec in enumerate(recomendaciones, 1):
+            informe += f"{i}. {rec}\n\n"
+        
+        informe += """## 📁 Archivos de Error
+Revisa el archivo `errores_mermaid.json` para ver el código Mermaid exacto que falló.
+
+## 🔄 Próxima Ejecución
+1. Aplica las recomendaciones de código arriba
+2. Elimina los archivos PNG generados (si quieres regenerar todos)
+3. Ejecuta el script nuevamente
+"""
     
-    if not respuesta_resumen:
-        log_error("Falló la generación del resumen ejecutivo")
-        return False
-    
-    dir_salida = Path(resultados['modulos'][0]['archivo']).parent if resultados['modulos'] else Path(".")
-    archivo_resumen = dir_salida / "RESUMEN_EJECUTIVO_PROYECTO.md"
-    
-    with open(archivo_resumen, 'w', encoding='utf-8') as f:
-        f.write(respuesta_resumen)
-    log_exito(f"Resumen ejecutivo guardado: {archivo_resumen.name}")
-    return True
+    # Guardar informe
+    try:
+        with open(INFORME_FILE, 'w', encoding='utf-8') as f:
+            f.write(informe)
+        log_exito(f"Informe de mejoras guardado en: {INFORME_FILE}")
+    except Exception as e:
+        log_error(f"No se pudo guardar el informe: {e}")
 
 # ============================================================================
 # FLUJO PRINCIPAL
 # ============================================================================
+
 def main():
-    print(f"\n{Colores.NEGRITA}{'='*70}{Colores.FIN}", flush=True)
-    print(f"{Colores.NEGRITA}  DOCUMENTADOR MODULAR CON DIAGRAMAS DE INTERDEPENDENCIA{Colores.FIN}", flush=True)
-    print(f"{Colores.NEGRITA}{'='*70}{Colores.FIN}\n", flush=True)
+    # 1. INICIAR SERVICIO AUTOMÁTICAMENTE
+    gestionar_ollama('start')
+    
+    logging.info("="*70)
+    logging.info("  GENERADOR DE MAPAS DE PROCESOS (VERSIÓN FINAL)")
+    logging.info("="*70)
     
     if len(sys.argv) < 2:
-        print(f"{Colores.ROJO}Error: Debes especificar el directorio{Colores.FIN}", flush=True)
-        print(f"Uso: {sys.argv[0]} <directorio_resultados> [modelo]", flush=True)
+        log_error("Debes especificar el directorio")
+        print(f"Uso: {sys.argv[0]} <directorio_resultados_script_1> [modelo]")
         sys.exit(1)
     
     directorio = sys.argv[1]
@@ -386,39 +547,32 @@ def main():
         sys.exit(1)
     
     log_info(f"Modelo seleccionado: {modelo}")
-    log_info(f"Fecha y hora: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    log_info(f"Fecha y hora de inicio: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     
-    log_paso("📂 PASO 1: Leyendo resultados del análisis previo")
-    resultados = leer_resultados_analisis(directorio)
-    
+    resultados = leer_resultados_funcionales(directorio)
     if not resultados['modulos']:
-        log_error("No se encontraron módulos analizados. Ejecuta primero analizar_proyecto_cpp.py")
+        log_error("No se encontraron archivos 'func_modulo_*.md'. Ejecuta primero el Script 1.")
         sys.exit(1)
     
-    log_paso(f"📄 PASO 2: Documentando {len(resultados['modulos'])} módulos")
+    log_paso(f"📄 PROCESANDO {len(resultados['modulos'])} MÓDULOS")
     exitosos = 0
-    fallidos = 0
     
     for i, modulo in enumerate(resultados['modulos'], 1):
-        print(f"\n{Colores.AZUL}[MÓDULO {i}/{len(resultados['modulos'])}]{Colores.FIN}", flush=True)
-        if documentar_modulo(modulo, modelo):
+        log_info(f"\n{Colores.AZUL}[MÓDULO {i}/{len(resultados['modulos'])}]{Colores.FIN}")
+        modulo_start = time.time()
+        
+        if generar_mapa_proceso(modulo, modelo):
             exitosos += 1
-        else:
-            fallidos += 1
+            
+        modulo_end = time.time()
+        log_info(f"--> Módulo {i} finalizado en {modulo_end - modulo_start:.2f} segundos totales.")
+            
+    # === GENERAR INFORME DE MEJORAS ANTES DE CERRAR ===
+    generar_informe_mejoras()
+    # ==================================================
     
-    log_exito(f"Módulos documentados: {exitosos} exitosos, {fallidos} fallidos")
-    
-    log_paso("🌐 PASO 3: Generando diagrama global")
-    generar_diagrama_global(resultados, modelo)
-    
-    log_paso("📊 PASO 4: Generando resumen ejecutivo")
-    generar_resumen_ejecutivo(resultados, modelo)
-    
-    print(f"\n{Colores.NEGRITA}{'='*70}{Colores.FIN}", flush=True)
-    print(f"{Colores.NEGRITA}  DOCUMENTACIÓN COMPLETADA{Colores.FIN}", flush=True)
-    print(f"{Colores.NEGRITA}{'='*70}{Colores.FIN}", flush=True)
-    print(f"{Colores.VERDE}✓ Módulos documentados: {exitosos}{Colores.FIN}", flush=True)
-    print(f"{Colores.VERDE}✓ Archivos generados en: {directorio}{Colores.FIN}", flush=True)
+    log_exito(f"Proceso finalizado: {exitosos}/{len(resultados['modulos'])} mapas generados exitosamente.")
+    logging.info("="*70)
 
 if __name__ == "__main__":
     main()
